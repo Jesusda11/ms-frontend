@@ -8,49 +8,44 @@
         <div class="col">
             <div class="card shadow">
                 <div class="card-header border-0">
-                    <h3 *ngIf="mode==1" class="mb-0">Visualizar</h3> <!-- Directivas, si se cumple sale la etiqueta-->
+                    <h3 *ngIf="mode==1" class="mb-0">Visualizar</h3>
                     <h3 *ngIf="mode==2" class="mb-0">Crear</h3>
                     <h3 *ngIf="mode==3" class="mb-0">Actualizar</h3>
                 </div>
-                <form class="'form" [formGroup]="theFormGroup">
                 <div class="card-body">
                     <div class="row">
                         <div class="col-4">
                             <label>Id:</label>
                         </div>
                         <div class="col-8">
-                            <!-- -->
-                            <p>{{theater.id}}</p>
+                            <input type="text" class="form-control" disabled [(ngModel)]="categoria.id">
                         </div>
                     </div>
                     <br>
                     <div class="row">
                         <div class="col-4">
-                            <label>Ubicación:</label>
+                            <label>Nombre:</label>
                         </div>
                         <div class="col-8">
-                            <input type="text" class="form-control" [(ngModel)]="theater.location" formControlName="location">
-                            <div
-                    *ngIf="getTheFormGroup.location.errors && (getTheFormGroup.location.dirty || getTheFormGroup.location.touched || trySend)">
-                    <strong *ngIf="getTheFormGroup.location.errors.required" class="msnError">Requerido</strong>
-                    <strong *ngIf="getTheFormGroup.location.errors.minlength" class="msnError">Inválido </strong>
-                  </div>
-                            
+                            <input type="text" [disabled]="mode === 1" class="form-control" [(ngModel)]="categoria.nombre">
                         </div>
                     </div>
                     <br>
                     <div class="row">
                         <div class="col-4">
-                            <label>Capacidad:</label>
+                            <label>Descripcion:</label>
                         </div>
                         <div class="col-8">
-                            <input type="number" class="form-control" [(ngModel)]="theater.capacity" formControlName="capacity">
-                            <div
-                    *ngIf="getTheFormGroup.capacity.errors && (getTheFormGroup.capacity.dirty || getTheFormGroup.capacity.touched || trySend)">
-                    <strong *ngIf="getTheFormGroup.capacity.errors.min" class="msnError">Valor mínimo debe ser 1</strong>
-                    <strong *ngIf="getTheFormGroup.capacity.errors.max" class="msnError">Valor máximo 100 </strong>
-                    <strong *ngIf="getTheFormGroup.capacity.errors.required" class="msnError">Requerido</strong>
-                  </div>
+                            <input type="text" [disabled]="mode === 1"  class="form-control" [(ngModel)]="categoria.descripcion">
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-4">
+                            <label>CategoriaPadre:</label>
+                        </div>
+                        <div class="col-8">
+                            <input type="number" [disabled]="mode === 1" class="form-control" [(ngModel)]="categoria.categoria_padre_id">
                         </div>
                     </div>
                     <br>
@@ -62,7 +57,7 @@
                         </div>
                     </div>
                 </div>
-            </form>
+
 
             </div>
         </div>
