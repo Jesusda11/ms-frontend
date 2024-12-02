@@ -53,4 +53,24 @@ export const AdminLayoutRoutes: Routes = [
         ]
       },
 
+      {
+        path: 'lotes',
+        children: [
+          {
+            path: '',
+            loadChildren: () => import('src/app/pages/lotes/lotes.module').then(m => m.LotesModule)
+          }
+        ]
+      },
+
+      {
+        path: 'empresas',
+        children: [
+          {
+            path: '',
+            loadChildren: () => import('src/app/pages/empresas/empresas.module').then(m => m.EmpresasModule)
+          }
+        ]
+      },
+
 ];

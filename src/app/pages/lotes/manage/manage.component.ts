@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Categoria } from 'src/app/models/categoria.model';
-import { CategoriaService } from 'src/app/services/categoria.service';
+import { log } from 'console';
+import { Lote } from 'src/app/models/lote.model';
+import { LoteService } from 'src/app/services/lote.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -12,17 +13,17 @@ import Swal from 'sweetalert2';
 })
 export class ManageComponent implements OnInit {
 
-  categoria:Categoria
+  lote:Lote
   //mode=1 --> view, mode=2 -->create, mode=3 -->Update
   mode:number
   theFormGroup:FormGroup  
   trySend:boolean  
-  constructor(private categoriasService:CategoriaService,
+  constructor(private lotesService:LoteService,
               private activateRoute:ActivatedRoute, 
               private router:Router, 
               private theFormBuilder:FormBuilder
   ) { 
-    this.categoria={id:0,nombre:"",descripcion:""}
+    this.lote={id:0,tipoDeCarga:"", peso:0, ruta_id:0}
     this.mode=0
     this.trySend=false
     //this.configFormGroup()
@@ -38,8 +39,8 @@ export class ManageComponent implements OnInit {
       this.mode = 3;
     }
     if (this.activateRoute.snapshot.params.id) { 
-      this.categoria.id = this.activateRoute.snapshot.params.id
-      this.getCategoria(this.categoria.id)
+      this.lote.id = this.activateRoute.snapshot.params.id
+      this.getLote(this.lote.id)
     }
   }
 
@@ -55,9 +56,9 @@ export class ManageComponent implements OnInit {
     return this.theFormGroup.controls
   } 
 
-  getCategoria(id:number){
-    this.categoriasService.view(id).subscribe(data =>{
-      this.categoria = data
+  getLote(id:number){
+    this.lotesService.view(id).subscribe(data =>{
+      this.lote = data
     })
   }
 
@@ -67,9 +68,10 @@ export class ManageComponent implements OnInit {
       Swal.fire("Error en el formulario", "Ingrese correctamente los datos")
       return
     }*/
-    this.categoriasService.create(this.categoria).subscribe(data =>{
+  
+    this.lotesService.create(this.lote).subscribe(data =>{
       Swal.fire("Creado", "Se ha creado exitosamente","success")
-      this.router.navigate(["categorias/list"])
+      this.router.navigate(["lotes/list"])
     })
   }
 
@@ -79,9 +81,9 @@ export class ManageComponent implements OnInit {
       Swal.fire("Error en el formulario", "Ingrese correctamente los datos")
       return
     }*/
-    this.categoriasService.update(this.categoria).subscribe(data =>{
+    this.lotesService.update(this.lote).subscribe(data =>{
       Swal.fire("Actualizado", "Se ha actualizado exitosamente","success")
-      this.router.navigate(["categorias/list"])
+      this.router.navigate(["lotes/list"])
     })
   }
 

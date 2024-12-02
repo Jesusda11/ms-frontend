@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Theater } from 'src/app/models/theater.model';
-import { TheaterService } from 'src/app/services/theater.service';
+import { Empresa } from 'src/app/models/empresa.model';
+import { EmpresaService } from 'src/app/services/empresa.service';
 import Swal from 'sweetalert2';
-
 
 @Component({
   selector: 'app-list',
@@ -12,10 +11,9 @@ import Swal from 'sweetalert2';
 })
 export class ListComponent implements OnInit {
 
-  theaters:Theater[];
-  constructor(private theatersService:TheaterService, private router: Router) {
-    
-    this.theaters= []
+  empresas:Empresa[];
+  constructor(private empresasService:EmpresaService, private router: Router) {
+    this.empresas=[]
   }
 
   ngOnInit(): void {
@@ -23,8 +21,8 @@ export class ListComponent implements OnInit {
   }
 
   list(){
-    this.theatersService.list().subscribe(data=> { // Para llamar a la API 
-      this.theaters=data
+    this.empresasService.list().subscribe(data=> {
+      this.empresas=data
     })
   }
 
@@ -38,7 +36,7 @@ export class ListComponent implements OnInit {
       cancelButtonText: "No,cancelar"
     }).then((result) => {
       if (result.isConfirmed) {
-        this.theatersService.delete(id).subscribe(data => {
+        this.empresasService.delete(id).subscribe(data => {
           this.ngOnInit()
           Swal.fire({
             title: "Eliminado",
@@ -52,14 +50,15 @@ export class ListComponent implements OnInit {
   }
   
   view(id:number){
-    this.router.navigate(["theaters/view",id])
+    this.router.navigate(["empresas/view",id])
   }
 
   update(id:number){
-    this.router.navigate(["theaters/update", id])
+    this.router.navigate(["empresas/update", id])
   }
 
   create(){
-    this.router.navigate(["theaters/create"])
+    this.router.navigate(["empresas/create"])
   }
+
 }

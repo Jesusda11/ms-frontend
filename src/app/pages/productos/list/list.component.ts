@@ -37,7 +37,7 @@ export class ListComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         this.productosService.delete(id).subscribe(data => {
-          this.ngOnInit
+          this.ngOnInit()
           Swal.fire({
             title: "Eliminado",
             text: "Se ha eliminado correctamente",

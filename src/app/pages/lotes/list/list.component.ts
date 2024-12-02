@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Theater } from 'src/app/models/theater.model';
-import { TheaterService } from 'src/app/services/theater.service';
+import { Lote } from 'src/app/models/lote.model';
+import { LoteService } from 'src/app/services/lote.service';
 import Swal from 'sweetalert2';
-
 
 @Component({
   selector: 'app-list',
@@ -12,10 +11,9 @@ import Swal from 'sweetalert2';
 })
 export class ListComponent implements OnInit {
 
-  theaters:Theater[];
-  constructor(private theatersService:TheaterService, private router: Router) {
-    
-    this.theaters= []
+  lotes:Lote[];
+  constructor(private lotesService:LoteService, private router: Router) {
+    this.lotes=[]
   }
 
   ngOnInit(): void {
@@ -23,8 +21,8 @@ export class ListComponent implements OnInit {
   }
 
   list(){
-    this.theatersService.list().subscribe(data=> { // Para llamar a la API 
-      this.theaters=data
+    this.lotesService.list().subscribe(data=> {
+      this.lotes=data
     })
   }
 
@@ -38,7 +36,7 @@ export class ListComponent implements OnInit {
       cancelButtonText: "No,cancelar"
     }).then((result) => {
       if (result.isConfirmed) {
-        this.theatersService.delete(id).subscribe(data => {
+        this.lotesService.delete(id).subscribe(data => {
           this.ngOnInit()
           Swal.fire({
             title: "Eliminado",
@@ -52,14 +50,15 @@ export class ListComponent implements OnInit {
   }
   
   view(id:number){
-    this.router.navigate(["theaters/view",id])
+    this.router.navigate(["lotes/view",id])
   }
 
   update(id:number){
-    this.router.navigate(["theaters/update", id])
+    this.router.navigate(["lotes/update", id])
   }
 
   create(){
-    this.router.navigate(["theaters/create"])
+    this.router.navigate(["lotes/create"])
   }
+
 }
