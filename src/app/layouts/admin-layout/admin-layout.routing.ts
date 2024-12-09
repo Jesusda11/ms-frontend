@@ -73,4 +73,14 @@ export const AdminLayoutRoutes: Routes = [
         ]
       },
 
+      {
+        path: 'conductores',
+        children: [
+          {
+            path: '',
+            loadChildren: () => import('src/app/pages/conductores/conductores.module').then(m => m.ConductoresModule)
+          }
+        ]
+      },
+
 ];
