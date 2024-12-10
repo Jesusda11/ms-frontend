@@ -32,7 +32,7 @@
                                 [disabled]="mode === 1"
                                 class="form-control"
                                 [ngModel]="mode === 1 ?lote.tipo_de_carga : lote.tipoDeCarga"
-                                (ngModelChange)="mode === 1 ? lote.tipo_de_carga = $event : lote.tipoDeCarga = $event"
+                                (ngModelChange)="mode === 1 ?  lote.tipo_de_carga  = $event : lote.tipoDeCarga  = $event"
                             >
                         </div>
                     </div>

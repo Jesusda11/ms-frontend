@@ -163,5 +163,45 @@ export const AdminLayoutRoutes: Routes = [
         ]
       },
 
+      {
+        path: 'direcciones',
+        children: [
+          {
+            path: '',
+            loadChildren: () => import('src/app/pages/direcciones/direcciones.module').then(m => m.DireccionesModule)
+          }
+        ]
+      },
+
+      {
+        path: 'direccionrutas',
+        children: [
+          {
+            path: '',
+            loadChildren: () => import('src/app/pages/direccionrutas/direccionrutas.module').then(m => m.DireccionrutasModule)
+          }
+        ]
+      },
+
+      {
+        path: 'clientes',
+        children: [
+          {
+            path: '',
+            loadChildren: () => import('src/app/pages/clientes/clientes.module').then(m => m.ClientesModule)
+          }
+        ]
+      },
+
+      {
+        path: 'personanaturales',
+        children: [
+          {
+            path: '',
+            loadChildren: () => import('src/app/pages/personanaturales/personanaturales.module').then(m => m.PersonanaturalesModule)
+          }
+        ]
+      },
+
       
 ];
