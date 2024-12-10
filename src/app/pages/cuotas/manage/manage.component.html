@@ -1,0 +1,100 @@
+
+<div class="header bg-gradient-danger pb-8 pt-5 pt-md-8">
+
+</div>
+<!-- Page content -->
+<div class="container-fluid mt--7">
+    <!-- Table -->
+    <div class="row">
+        <div class="col">
+            <div class="card shadow">
+                <div class="card-header border-0">
+                    <h3 *ngIf="mode==1" class="mb-0">Visualizar</h3>
+                    <h3 *ngIf="mode==2" class="mb-0">Crear</h3>
+                    <h3 *ngIf="mode==3" class="mb-0">Actualizar</h3>
+                </div>
+                <div class="card-body">
+                    <div *ngIf="mode==1" class="row">
+                        <div class="col-4">
+                            <label>Id:</label>
+                        </div>
+                        <div class="col-8">
+                            <input type="text" class="form-control" disabled [(ngModel)]="cuota.id">
+                        </div>
+                    </div>
+                    <br>
+                    
+        <div class="row">
+            <div class="col-4">
+                <label>Contrato_id:</label>
+            </div>
+            <div class="col-8">
+                <input type="number" class="form-control" [disabled]="mode === 1" [(ngModel)]="cuota.contrato_id">
+            </div>
+        </div> 
+        <br/>
+        
+        <div class="row">
+            <div class="col-4">
+                <label>Factura_id:</label>
+            </div>
+            <div class="col-8">
+                <input type="number" class="form-control" [disabled]="mode === 1" [(ngModel)]="cuota.factura_id">
+            </div>
+        </div> 
+        <br/>
+        
+        <div class="row">
+            <div class="col-4">
+                <label>Monto:</label>
+            </div>
+            <div class="col-8">
+                <input type="number" class="form-control" [disabled]="mode === 1" [(ngModel)]="cuota.monto">
+            </div>
+        </div> 
+        <br/>
+        
+        <div class="row">
+            <div class="col-4">
+                <label>Tasa_interes:</label>
+            </div>
+            <div class="col-8">
+                <input type="number" class="form-control" [disabled]="mode === 1" [(ngModel)]="cuota.tasa_interes">
+            </div>
+        </div> 
+        <br/>
+        
+        <div class="row">
+            <div class="col-4">
+                <label>Fecha_generacion:</label>
+            </div>
+            <div class="col-8">
+                <input type="date" class="form-control" [disabled]="mode === 1" [(ngModel)]="cuota.fecha_generacion">
+            </div>
+        </div> 
+        <br/>
+        
+        <div class="row">
+            <div class="col-4">
+                <label>Fecha_vencimiento:</label>
+            </div>
+            <div class="col-8">
+                <input type="date" class="form-control" [disabled]="mode === 1" [(ngModel)]="cuota.fecha_vencimiento">
+            </div>
+        </div> 
+        <br/>
+        
+                    <div class="row">
+                      <div class="col-4"></div>
+                      <div class="col-8">
+                          <button *ngIf="mode==2" class="btn btn-success btn-block" (click)="create()">Crear</button>
+                          <button *ngIf="mode==3" class="btn btn-success btn-block" (click)="update()">Actualizar</button>
+                      </div>
+                  </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>

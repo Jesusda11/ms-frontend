@@ -1,8 +1,9 @@
+
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Conductor } from 'src/app/models/conductor.model';
-import { ConductorService } from 'src/app/services/conductor.service';
+import { Dueniovehiculo } from 'src/app/models/dueniovehiculo.model';
+import { DueniovehiculosService } from 'src/app/services/dueniovehiculos.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -11,21 +12,20 @@ import Swal from 'sweetalert2';
   styleUrls: ['./manage.component.scss']
 })
 export class ManageComponent implements OnInit {
-
-  conductor:Conductor
+  dueniovehiculo:Dueniovehiculo
   //mode=1 --> view, mode=2 -->create, mode=3 -->Update
   mode:number
   theFormGroup:FormGroup  // Es el que hace cumplir las reglas
   trySend:boolean  
-  constructor(private conductorsService:ConductorService, //
+  constructor(private  dueniovehiculosService:DueniovehiculosService, //
               private activateRoute:ActivatedRoute, //Me sirve para analizar la URL de la página, que quieren hacer en el momento
               private router:Router, //Me ayuda a gestionar los archivos del routing/moverme entre componentes
               private theFormBuilder:FormBuilder //congreso
   ) { 
-    this.conductor={id:0,usuario_id:"",licencia_conduccion:"",anios_experiencia:0}
+    this.dueniovehiculo={id: 0,vehiculo_id: 0,duenio_id: 0,fecha_compra: '',}
     this.mode=0
     this.trySend=false
-    //this.configFormGroup()
+    this.configFormGroup()
   }
 
   ngOnInit(): void {
@@ -38,51 +38,51 @@ export class ManageComponent implements OnInit {
       this.mode = 3;
     }
     if (this.activateRoute.snapshot.params.id) { //Tomele foto necesito el id
-      this.conductor.id = this.activateRoute.snapshot.params.id
-      this.getConductor(this.conductor.id)
+      this.dueniovehiculo.id = this.activateRoute.snapshot.params.id
+      this.getDueniovehiculo(this.dueniovehiculo.id)
     }
   }
 
-  /*configFormGroup(){
+  configFormGroup(){
     this.theFormGroup=this.theFormBuilder.group({
       // primer elemento del vector, valor por defecto
       // lista, serán las reglas
-      capacity:[0,[Validators.required,Validators.min(1),Validators.max(100)]], //La lista son las reglas para aplicar a dicho campo
-      location:['',[Validators.required,Validators.minLength(2)]]  
+      //capacity:[0,[Validators.required,Validators.min(1),Validators.max(100)]], //La lista son las reglas para aplicar a dicho campo
     })
-  }*/
+  }
   get getTheFormGroup(){
     return this.theFormGroup.controls
   } //Esto devuelve realmente una variable
 
-  getConductor(id:number){
-    this.conductorsService.view(id).subscribe(data =>{
-      this.conductor= data["conductor"]
-      this.conductor.usuario_id= data["usuario"]._id
+  getDueniovehiculo(id:number){
+    this.dueniovehiculosService.view(id).subscribe(data =>{
+      this.dueniovehiculo = data
+      this.dueniovehiculo.fecha_compra = this.dueniovehiculo.fecha_compra.split("T")[0]
+
     })
   }
 
   create(){
-    /*if(this.theFormGroup.invalid){
+    if(this.theFormGroup.invalid){
       this.trySend=true
       Swal.fire("Error en el formulario", "Ingrese correctamente los datos")
       return
-    }*/
-    this.conductorsService.create(this.conductor).subscribe(data =>{
+    }
+    this.dueniovehiculosService.create(this.dueniovehiculo).subscribe(data =>{
       Swal.fire("Creado", "Se ha creado exitosamente","success")
-      this.router.navigate(["conductores/list"])
+      this.router.navigate(["dueniovehiculos/list"])
     })
   }
 
   update(){
-    /*if(this.theFormGroup.invalid){
+    if(this.theFormGroup.invalid){
       this.trySend=true
       Swal.fire("Error en el formulario", "Ingrese correctamente los datos")
       return
-    }*/
-    this.conductorsService.update(this.conductor).subscribe(data =>{
+    }
+    this.dueniovehiculosService.update(this.dueniovehiculo).subscribe(data =>{
       Swal.fire("Actualizado", "Se ha actualizado exitosamente","success")
-      this.router.navigate(["conductores/list"])
+      this.router.navigate(["dueniovehiculos/list"])
     })
   }
 

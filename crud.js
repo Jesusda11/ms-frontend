@@ -111,24 +111,24 @@ export class ${pluralCapitalized}Service {
   constructor(private http: HttpClient) { }
 
   list(): Observable<${singularCapitalized}[]> {
-    return this.http.get<${singularCapitalized}[]>(\`\${environment.url_ms_cinema}/${pluralName}\`);
+    return this.http.get<${singularCapitalized}[]>(\`\${environment.url_ms_business}/${pluralName}\`);
   }
 
   delete(id: number): Observable<${singularCapitalized}> {
-    return this.http.delete<${singularCapitalized}>(\`\${environment.url_ms_cinema}/${pluralName}/\${id}\`);
+    return this.http.delete<${singularCapitalized}>(\`\${environment.url_ms_business}/${pluralName}/\${id}\`);
   }
 
   view(id: number): Observable<${singularCapitalized}> {
-    return this.http.get<${singularCapitalized}>(\`\${environment.url_ms_cinema}/${pluralName}/\${id}\`);
+    return this.http.get<${singularCapitalized}>(\`\${environment.url_ms_business}/${pluralName}/\${id}\`);
   }
 
   create(${pluralName}: ${singularCapitalized}): Observable<${singularCapitalized}> {
     delete ${pluralName}.id;
-    return this.http.post<${singularCapitalized}>(\`\${environment.url_ms_cinema}/${pluralName}\`, ${pluralName});
+    return this.http.post<${singularCapitalized}>(\`\${environment.url_ms_business}/${pluralName}\`, ${pluralName});
   }
 
   update(${pluralName}: ${singularCapitalized}): Observable<${singularCapitalized}> {
-    return this.http.put<${singularCapitalized}>(\`\${environment.url_ms_cinema}/${pluralName}/\${${pluralName}.id}\`, ${pluralName});
+    return this.http.put<${singularCapitalized}>(\`\${environment.url_ms_business}/${pluralName}/\${${pluralName}.id}\`, ${pluralName});
   }
 }
   `;

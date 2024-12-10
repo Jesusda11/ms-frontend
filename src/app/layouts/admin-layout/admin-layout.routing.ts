@@ -83,4 +83,85 @@ export const AdminLayoutRoutes: Routes = [
         ]
       },
 
+      {
+        path: 'turnos',
+        children: [
+          {
+            path: '',
+            loadChildren: () => import('src/app/pages/turnos/turnos.module').then(m => m.TurnosModule)
+          }
+        ]
+      },
+
+      {
+        path: 'duenios',
+        children: [
+          {
+            path: '',
+            loadChildren: () => import('src/app/pages/duenios/duenios.module').then(m => m.DueniosModule)
+          }
+        ]
+      },
+
+      {
+        path: 'vehiculos',
+        children: [
+          {
+            path: '',
+            loadChildren: () => import('src/app/pages/vehiculos/vehiculos.module').then(m => m.VehiculosModule)
+          }
+        ]
+      },
+
+      {
+        path: 'dueniovehiculos',
+        children: [
+          {
+            path: '',
+            loadChildren: () => import('src/app/pages/dueniovehiculos/dueniovehiculos.module').then(m => m.DueniovehiculosModule)
+          }
+        ]
+      },
+
+      {
+        path: 'vehiculoconductores',
+        children: [
+          {
+            path: '',
+            loadChildren: () => import('src/app/pages/vehiculoconductores/vehiculoconductores.module').then(m => m.VehiculoconductoresModule)
+          }
+        ]
+      },
+
+      {
+        path: 'contratos',
+        children: [
+          {
+            path: '',
+            loadChildren: () => import('src/app/pages/contratos/contratos.module').then(m => m.ContratosModule)
+          }
+        ]
+      },
+
+      {
+        path: 'rutas',
+        children: [
+          {
+            path: '',
+            loadChildren: () => import('src/app/pages/rutas/rutas.module').then(m => m.RutasModule)
+          }
+        ]
+      },
+
+      {
+        path: 'cuotas',
+        children: [
+          {
+            path: '',
+            loadChildren: () => import('src/app/pages/cuotas/cuotas.module').then(m => m.CuotasModule)
+          }
+        ]
+      },
+
+      
 ];
