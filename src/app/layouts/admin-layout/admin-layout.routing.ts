@@ -203,5 +203,42 @@ export const AdminLayoutRoutes: Routes = [
         ]
       },
 
-      
+      {
+        path: 'facturas',
+        children: [
+          {
+            path: '',
+            loadChildren: () => import('src/app/pages/facturas/facturas.module').then(m => m.FacturasModule)
+          }
+        ]
+      },
+
+      {
+        path: 'gastos',
+        children: [
+          {
+            path: '',
+            loadChildren: () => import('src/app/pages/gastos/gastos.module').then(m => m.GastosModule)
+          }
+        ]
+      },
+      {
+        path: 'servicios',
+        children: [
+          {
+            path: '',
+            loadChildren: () => import('src/app/pages/servicios/servicios.module').then(m => m.ServiciosModule)
+          }
+        ]
+      },
+      {
+        path: 'administradores',
+        children: [
+          {
+            path: '',
+            loadChildren: () => import('src/app/pages/administradores/administradores.module').then(m => m.AdministradoresModule)
+          }
+        ]
+      },
+      /* AUTO-ROUTES */
 ];
