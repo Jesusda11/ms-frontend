@@ -1,4 +1,3 @@
-
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -12,24 +11,30 @@ import Swal from 'sweetalert2';
   styleUrls: ['./manage.component.scss']
 })
 export class ManageComponent implements OnInit {
-  cliente:Cliente
-  //mode=1 --> view, mode=2 -->create, mode=3 -->Update
-  mode:number
-  theFormGroup:FormGroup  // Es el que hace cumplir las reglas
-  trySend:boolean  
-  constructor(private  clientesService:ClientesService, //
-              private activateRoute:ActivatedRoute, //Me sirve para analizar la URL de la página, que quieren hacer en el momento
-              private router:Router, //Me ayuda a gestionar los archivos del routing/moverme entre componentes
-              private theFormBuilder:FormBuilder //congreso
+  cliente: Cliente;
+  personaNatural: any = {}; // Objeto para datos de Persona Natural
+  showPersonaNaturalForm: boolean = false; // Controla visibilidad del formulario
+  mode: number; // 1 -> View, 2 -> Create, 3 -> Update
+  theFormGroup: FormGroup; // Formulario para validaciones
+  trySend: boolean;  
+
+  constructor(
+    private clientesService: ClientesService,
+    private activateRoute: ActivatedRoute,
+    private router: Router,
+    private theFormBuilder: FormBuilder
   ) { 
-    this.cliente={fechaRegistro: '',preferencias: '',id: 0,}
-    this.mode=0
-    this.trySend=false
-    this.configFormGroup()
+    this.cliente = { fechaRegistro: '', preferencias: '', id: 0 , personanatural:{nacionalidad: '',
+      genero: '',
+      usuario_id: null,
+    id:0}};
+    this.mode = 0;
+    this.trySend = false;
+    this.configFormGroup();
   }
 
   ngOnInit(): void {
-    const currentUrl = this.activateRoute.snapshot.url.join('/'); //Tome foto de L url 
+    const currentUrl = this.activateRoute.snapshot.url.join('/');
     if (currentUrl.includes('view')) { 
       this.mode = 1;
     } else if (currentUrl.includes('create')) {
@@ -37,53 +42,67 @@ export class ManageComponent implements OnInit {
     } else if (currentUrl.includes('update')) {
       this.mode = 3;
     }
-    if (this.activateRoute.snapshot.params.id) { //Tomele foto necesito el id
-      this.cliente.id = this.activateRoute.snapshot.params.id
-      this.getCliente(this.cliente.id)
+    if (this.activateRoute.snapshot.params.id) {
+      this.cliente.id = this.activateRoute.snapshot.params.id;
+      this.getCliente(this.cliente.id);
     }
   }
 
-  configFormGroup(){
-    this.theFormGroup=this.theFormBuilder.group({
-      // primer elemento del vector, valor por defecto
-      // lista, serán las reglas
-      //capacity:[0,[Validators.required,Validators.min(1),Validators.max(100)]], //La lista son las reglas para aplicar a dicho campo
-    })
-  }
-  get getTheFormGroup(){
-    return this.theFormGroup.controls
-  } //Esto devuelve realmente una variable
-
-  getCliente(id:number){
-    this.clientesService.view(id).subscribe(data =>{
-      this.cliente = data
-      this.cliente.fecha_registro = this.cliente.fecha_registro.split("T")[0]
-
-    })
+  configFormGroup() {
+    this.theFormGroup = this.theFormBuilder.group({
+      // Añade aquí las validaciones necesarias
+    });
   }
 
-  create(){
-    if(this.theFormGroup.invalid){
-      this.trySend=true
-      Swal.fire("Error en el formulario", "Ingrese correctamente los datos")
-      return
+  get getTheFormGroup() {
+    return this.theFormGroup.controls;
+  }
+
+  getCliente(id: number) {
+    this.clientesService.view(id).subscribe(data => {
+      this.cliente = data;
+      this.cliente.fecha_registro = this.cliente.fecha_registro.split("T")[0];
+    });
+  }
+
+  openPersonaNaturalForm() {
+    this.showPersonaNaturalForm = true;
+  }
+
+  closePersonaNaturalForm() {
+    this.showPersonaNaturalForm = false;
+  }
+
+  savePersonaNatural() {
+    this.cliente.personanatural = this.personaNatural; // Asigna los datos al cliente
+    this.closePersonaNaturalForm();
+  }
+
+  create() {
+    if (this.theFormGroup.invalid) {
+      this.trySend = true;
+      Swal.fire("Error en el formulario", "Ingrese correctamente los datos");
+      return;
     }
-    this.clientesService.create(this.cliente).subscribe(data =>{
-      Swal.fire("Creado", "Se ha creado exitosamente","success")
-      this.router.navigate(["clientes/list"])
-    })
+    this.clientesService.create(this.cliente).subscribe(data => {
+      Swal.fire("Creado", "Se ha creado exitosamente", "success");
+      this.router.navigate(["clientes/list"]);
+    });
   }
 
-  update(){
-    if(this.theFormGroup.invalid){
-      this.trySend=true
-      Swal.fire("Error en el formulario", "Ingrese correctamente los datos")
-      return
+  update() {
+    if (this.theFormGroup.invalid) {
+      this.trySend = true;
+      Swal.fire("Error en el formulario", "Ingrese correctamente los datos");
+      return;
     }
-    this.clientesService.update(this.cliente).subscribe(data =>{
-      Swal.fire("Actualizado", "Se ha actualizado exitosamente","success")
-      this.router.navigate(["clientes/list"])
-    })
+    this.clientesService.update(this.cliente).subscribe(data => {
+      Swal.fire("Actualizado", "Se ha actualizado exitosamente", "success");
+      this.router.navigate(["clientes/list"]);
+    });
   }
 
+  togglePersonaNatural() {
+    this.showPersonaNaturalForm = !this.showPersonaNaturalForm;
+  }
 }
