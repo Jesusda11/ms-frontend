@@ -1,5 +1,5 @@
 
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Factura } from 'src/app/models/factura.model';
@@ -12,6 +12,10 @@ import Swal from 'sweetalert2';
   styleUrls: ['./manage.component.scss']
 })
 export class ManageComponent implements OnInit {
+  @ViewChild('fechaInput') fechaInput!: ElementRef;
+  @ViewChild('totalInput') totalInput!: ElementRef;
+  @ViewChild('estadoInput') estadoInput!: ElementRef;
+
   factura:Factura
   //mode=1 --> view, mode=2 -->create, mode=3 -->Update
   mode:number
@@ -43,13 +47,14 @@ export class ManageComponent implements OnInit {
     }
   }
 
-  configFormGroup(){
-    this.theFormGroup=this.theFormBuilder.group({
-      // primer elemento del vector, valor por defecto
-      // lista, serán las reglas
-      //capacity:[0,[Validators.required,Validators.min(1),Validators.max(100)]], //La lista son las reglas para aplicar a dicho campo
-    })
+  configFormGroup() {
+    this.theFormGroup = this.theFormBuilder.group({
+      fecha: ['', Validators.required], // Fecha obligatoria
+      total: [0, [Validators.required, Validators.min(0)]], // Total debe ser >= 0
+      estado: ['', [Validators.required]]// Estado requerido
+    });
   }
+  
   get getTheFormGroup(){
     return this.theFormGroup.controls
   } //Esto devuelve realmente una variable
@@ -58,21 +63,73 @@ export class ManageComponent implements OnInit {
     this.facturasService.view(id).subscribe(data =>{
       this.factura = data
       this.factura.fecha = this.factura.fecha.split("T")[0]
-
+      this.theFormGroup.patchValue(this.factura);
     })
   }
 
-  create(){
-    if(this.theFormGroup.invalid){
-      this.trySend=true
-      Swal.fire("Error en el formulario", "Ingrese correctamente los datos")
-      return
+  create() {
+    this.trySend=false
+    // Verificar si el formulario es inválido
+    if (this.theFormGroup.invalid) {
+      this.trySend = true;
+  
+      if (this.theFormGroup.get('fecha')?.errors) {
+        this.showFieldError('fecha', 'Campo fecha', 'Ingresa una fecha 📅', this.fechaInput);
+        return;
+      }
+
+      if (this.theFormGroup.get('total')?.errors) {
+
+        if(this.theFormGroup.get('total')?.errors?.['required']){
+          this.showFieldError('total', 'Campo Total', 'Ingresa un total 💸', this.totalInput); // Enfoca el input de total
+        }else if(this.theFormGroup.get('total')?.errors?.['min']){
+          this.showFieldError('total', 'Campo Total', 'valor minimo es 0 💸', this.totalInput); // Enfoca el input de total
+        }
+        
+        return; 
+      }
+  
+      if (this.theFormGroup.get('estado')?.errors) {
+        this.showFieldError('estado', 'Campo Estado', 'Ingresa un estado', this.estadoInput);
+        return; 
+      }
+      // Mostrar un error genérico si hay errores que no fueron específicos
+      Swal.fire('Error en el formulario', 'Corrige los errores antes de continuar.', 'error');
+      return;
     }
-    this.facturasService.create(this.factura).subscribe(data =>{
-      Swal.fire("Creado", "Se ha creado exitosamente","success")
-      this.router.navigate(["facturas/list"])
-    })
+  
+    const factura = this.theFormGroup.value; // Obtiene valores del FormGroup
+    this.facturasService.create(factura).subscribe(data => {
+      Swal.fire("Creado", "Se ha creado exitosamente", "success");
+      this.router.navigate(["facturas/list"]);
+    });
   }
+  
+
+  private showFieldError(
+    fieldName: string,
+    title: string,
+    message: string,
+    inputRef: ElementRef
+  ) {
+    let timerInterval;
+    Swal.fire({
+      icon: "warning",
+      title: title,
+      html: message,
+      timer: 2000,
+      timerProgressBar: true,
+      showConfirmButton: false,
+      willClose: () => {
+        clearInterval(timerInterval);
+      }
+    }).then(() => {
+      // Usar un setTimeout para garantizar el foco correcto después de cerrar la alerta
+      setTimeout(() => {
+        inputRef.nativeElement.focus();
+      }, 500); // Ajusta el tiempo si es necesario
+    });
+  }  
 
   update(){
     if(this.theFormGroup.invalid){

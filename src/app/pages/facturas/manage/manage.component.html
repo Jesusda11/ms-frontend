@@ -5,6 +5,7 @@
 <!-- Page content -->
 <div class="container-fluid mt--7">
     <!-- Table -->
+    <form [formGroup]="theFormGroup" (ngSubmit)="mode === 2 ? create() : update()">
     <div class="row">
         <div class="col">
             <div class="card shadow">
@@ -19,7 +20,7 @@
                             <label>Id:</label>
                         </div>
                         <div class="col-8">
-                            <input type="text" class="form-control" disabled [(ngModel)]="factura.id">
+                            <input type="text" class="form-control" disabled formControlName="id">
                         </div>
                     </div>
                     <br>
@@ -29,7 +30,7 @@
                 <label>Fecha:</label>
             </div>
             <div class="col-8">
-                <input type="date" class="form-control" [disabled]="mode === 1" [(ngModel)]="factura.fecha">
+                <input type="date" class="form-control" [disabled]="mode === 1" formControlName="fecha" #fechaInput [ngClass]="{'inputInvalido': trySend && theFormGroup.get('fecha')?.errors}">
             </div>
         </div> 
         <br/>
@@ -39,7 +40,7 @@
                 <label>Total:</label>
             </div>
             <div class="col-8">
-                <input type="number" class="form-control" [disabled]="mode === 1" [(ngModel)]="factura.total">
+                <input type="number"  min="0" class="form-control" [disabled]="mode === 1" formControlName="total" #totalInput [ngClass]="{'inputInvalido': trySend && theFormGroup.get('total')?.errors}"   >
             </div>
         </div> 
         <br/>
@@ -49,11 +50,15 @@
                 <label>Estado:</label>
             </div>
             <div class="col-8">
-                <input type="text" class="form-control" [disabled]="mode === 1" [(ngModel)]="factura.estado">
+                <select class="form-control" [disabled]="mode === 1" formControlName="estado" [ngClass]="{'inputInvalido': trySend && theFormGroup.get('estado')?.errors}">
+                    <option value="aceptado">Aceptado</option>
+                    <option value="rechazado">Rechazado</option>
+                    <option value="pendiente">Pendiente</option>
+                </select>
             </div>
         </div> 
         <br/>
-        
+
                     <div class="row">
                       <div class="col-4"></div>
                       <div class="col-8">
@@ -62,9 +67,8 @@
                       </div>
                   </div>
                 </div>
-
-
             </div>
         </div>
     </div>
+</form>
 </div>
