@@ -5,13 +5,17 @@ import { IconsComponent } from '../../pages/icons/icons.component';
 import { MapsComponent } from '../../pages/maps/maps.component';
 import { UserProfileComponent } from '../../pages/user-profile/user-profile.component';
 import { TablesComponent } from '../../pages/tables/tables.component';
+import { AuthenticatedGuard } from 'src/app/guards/authenticated.guard';
+import { LoginComponent } from 'src/app/pages/login/login.component';
+import { NoAuthenticatedGuard } from 'src/app/guards/no-authenticated.guard';
 
 export const AdminLayoutRoutes: Routes = [
     { path: 'dashboard',      component: DashboardComponent },
-    { path: 'user-profile',   component: UserProfileComponent },
+    { path: 'user-profile', canActivate:[AuthenticatedGuard],  component: UserProfileComponent },
     { path: 'tables',         component: TablesComponent },
     { path: 'icons',          component: IconsComponent },
     { path: 'maps',           component: MapsComponent },
+    {path: 'login', canActivate:[NoAuthenticatedGuard],  component:LoginComponent},
 
     {
         path: 'theaters',
@@ -35,6 +39,7 @@ export const AdminLayoutRoutes: Routes = [
 
       {
         path: 'categorias',
+        canActivate:[AuthenticatedGuard],
         children: [
           {
             path: '',
