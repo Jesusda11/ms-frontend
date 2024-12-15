@@ -5,6 +5,7 @@
 <!-- Page content -->
 <div class="container-fluid mt--7">
     <!-- Table -->
+    <form [formGroup]="theFormGroup" (ngSubmit)="mode === 2 ? create() : update()">
     <div class="row">
         <div class="col">
             <div class="card shadow">
@@ -19,7 +20,7 @@
                             <label>Id:</label>
                         </div>
                         <div class="col-8">
-                            <input type="text" class="form-control" disabled [(ngModel)]="servicio.id">
+                            <input type="text" class="form-control" disabled formControlName="id">
                         </div>
                     </div>
                     <br>
@@ -29,7 +30,7 @@
                 <label>Nombre:</label>
             </div>
             <div class="col-8">
-                <input type="text" class="form-control" [disabled]="mode === 1" [(ngModel)]="servicio.nombre">
+                <input type="text" class="form-control" [disabled]="mode === 1" formControlName="nombre">
             </div>
         </div> 
         <br/>
@@ -39,7 +40,7 @@
                 <label>Direccion:</label>
             </div>
             <div class="col-8">
-                <input type="text" class="form-control" [disabled]="mode === 1" [(ngModel)]="servicio.direccion">
+                <input type="text" class="form-control" [disabled]="mode === 1" formControlName="direccion">
             </div>
         </div> 
         <br/>
@@ -49,7 +50,7 @@
                 <label>Descripcion:</label>
             </div>
             <div class="col-8">
-                <input type="text" class="form-control" [disabled]="mode === 1" [(ngModel)]="servicio.descripcion">
+                <input type="text" class="form-control" [disabled]="mode === 1" formControlName="descripcion">
             </div>
         </div> 
         <br/>
@@ -59,11 +60,24 @@
                 <label>Fecha:</label>
             </div>
             <div class="col-8">
-                <input type="date" class="form-control" [disabled]="mode === 1" [(ngModel)]="servicio.fecha">
+                <input type="date" class="form-control" [disabled]="mode === 1" formControlName="fecha">
             </div>
         </div> 
+
         <br/>
-        
+
+        <div class="row">
+            <div class="col-4">
+                <label>id administrador:</label>
+            </div>
+            <div class="col-8">
+                <select class="form-control" [disabled]="mode === 1" formControlName="administrador_id">
+                    <option [value]="admin.id"  *ngFor="let admin of administradores" >{{admin.id}}  {{admin.usuario_name}}</option>
+                </select>
+            </div>
+        </div> 
+
+        <br/>
                     <div class="row">
                       <div class="col-4"></div>
                       <div class="col-8">
@@ -77,4 +91,5 @@
             </div>
         </div>
     </div>
+    </form>
 </div>

@@ -2,8 +2,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Administrador } from 'src/app/models/administrador.model';
-import { AdministradoresService } from 'src/app/services/administradores.service';
+import { Usuario } from 'src/app/models/usuario.model';
+import { UsuariosService } from 'src/app/services/usuarios.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -12,17 +12,17 @@ import Swal from 'sweetalert2';
   styleUrls: ['./manage.component.scss']
 })
 export class ManageComponent implements OnInit {
-  administrador:Administrador
+  usuario:Usuario
   //mode=1 --> view, mode=2 -->create, mode=3 -->Update
   mode:number
   theFormGroup:FormGroup  // Es el que hace cumplir las reglas
   trySend:boolean  
-  constructor(private  administradoresService:AdministradoresService, //
+  constructor(private  usuariosService:UsuariosService, //
               private activateRoute:ActivatedRoute, //Me sirve para analizar la URL de la página, que quieren hacer en el momento
               private router:Router, //Me ayuda a gestionar los archivos del routing/moverme entre componentes
               private theFormBuilder:FormBuilder //congreso
   ) { 
-    this.administrador={nivelAcceso: '',usuario_id: '',id: 0,}
+    this.usuario={name: '',email: '',password: '',id: 0,}
     this.mode=0
     this.trySend=false
     this.configFormGroup()
@@ -38,8 +38,8 @@ export class ManageComponent implements OnInit {
       this.mode = 3;
     }
     if (this.activateRoute.snapshot.params.id) { //Tomele foto necesito el id
-      this.administrador.id = this.activateRoute.snapshot.params.id
-      this.getAdministrador(this.administrador.id)
+      this.usuario.id = this.activateRoute.snapshot.params.id
+      this.getUsuario(this.usuario.id)
     }
   }
 
@@ -54,11 +54,9 @@ export class ManageComponent implements OnInit {
     return this.theFormGroup.controls
   } //Esto devuelve realmente una variable
 
-  getAdministrador(id:number){
-    this.administradoresService.view(id).subscribe(data =>{
-      console.log("administrador get", data);
-      
-      this.administrador = data
+  getUsuario(id:number){
+    this.usuariosService.view(id.toString()).subscribe(data =>{
+      this.usuario = data
       
     })
   }
@@ -69,9 +67,9 @@ export class ManageComponent implements OnInit {
       Swal.fire("Error en el formulario", "Ingrese correctamente los datos")
       return
     }
-    this.administradoresService.create(this.administrador).subscribe(data =>{
+    this.usuariosService.create(this.usuario).subscribe(data =>{
       Swal.fire("Creado", "Se ha creado exitosamente","success")
-      this.router.navigate(["administradores/list"])
+      this.router.navigate(["usuarios/list"])
     })
   }
 
@@ -81,9 +79,9 @@ export class ManageComponent implements OnInit {
       Swal.fire("Error en el formulario", "Ingrese correctamente los datos")
       return
     }
-    this.administradoresService.update(this.administrador).subscribe(data =>{
+    this.usuariosService.update(this.usuario).subscribe(data =>{
       Swal.fire("Actualizado", "Se ha actualizado exitosamente","success")
-      this.router.navigate(["administradores/list"])
+      this.router.navigate(["usuarios/list"])
     })
   }
 

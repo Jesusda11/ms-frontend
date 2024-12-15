@@ -3,5 +3,6 @@ export class Servicio {
   direccion: string;
   descripcion: string;
   fecha: string;
+  administrador_id: number;
   id: number;
 }

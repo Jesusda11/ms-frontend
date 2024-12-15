@@ -8,36 +8,30 @@
         <div class="col">
             <div class="card shadow">
                 <div class="card-header border-0">
-                    <h3 class="mb-0">Servicios</h3> 
+                    <h3 class="mb-0">Usuarios</h3> 
                     <button type="button" class="btn btn-success" (click)="create()">Crear</button>   
                 </div>
                <div class="card-body">
                 <table class="table">
                     <thead>
                         <tr>
-                          <th scope="col">Nombre</th>
-<th scope="col">Direccion</th>
-<th scope="col">Descripcion</th>
-<th scope="col">Fecha</th>
-<th scope="col">admistrador</th>
+                          <th scope="col">Name</th>
+<th scope="col">Email</th>
+<th scope="col">Password</th>
 <th scope="col">Id</th>
 
                           <th scope="col">Opciones</th>
                         </tr>
                       </thead>
                       <tbody>
-                        <tr *ngFor="let actual of servicios">
+                        <tr *ngFor="let actual of usuarios">
                             
-    <td>{{actual.nombre}}</td>
+    <td>{{actual.name}}</td>
   
-    <td>{{actual.direccion}}</td>
+    <td>{{actual.email}}</td>
   
-    <td>{{actual.descripcion}}</td>
+    <td>{{actual.password}}</td>
   
-    <td>{{actual.fecha | date: 'yyyy-MM-dd' }}</td>
-  
-    <td>{{actual.administrador_id}}</td>
-
     <td>{{actual.id}}</td>
   
                             <td>

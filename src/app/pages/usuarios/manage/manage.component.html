@@ -19,31 +19,39 @@
                             <label>Id:</label>
                         </div>
                         <div class="col-8">
-                            <input type="text" class="form-control" disabled [(ngModel)]="administrador.id">
+                            <input type="text" class="form-control" disabled [(ngModel)]="usuario.id">
                         </div>
                     </div>
                     <br>
                     
         <div class="row">
             <div class="col-4">
-                <label>NivelAcceso:</label>
+                <label>Name:</label>
             </div>
             <div class="col-8">
-                <input type="text" class="form-control" [disabled]="mode === 1" [(ngModel)]="administrador.nivelAcceso">
+                <input type="text" class="form-control" [disabled]="mode === 1" [(ngModel)]="usuario.name">
             </div>
         </div> 
         <br/>
         
         <div class="row">
             <div class="col-4">
-                <label>Usuario_id:</label>
+                <label>Email:</label>
             </div>
             <div class="col-8">
-                <input type="text" class="form-control" [disabled]="mode === 1" [(ngModel)]="administrador.usuario_id">
+                <input type="text" class="form-control" [disabled]="mode === 1" [(ngModel)]="usuario.email">
             </div>
         </div> 
         <br/>
-    
+        
+        <div class="row">
+            <div class="col-4">
+                <label>Password:</label>
+            </div>
+            <div class="col-8">
+                <input type="text" class="form-control" [disabled]="mode === 1" [(ngModel)]="usuario.password">
+            </div>
+        </div> 
         <br/>
         
                     <div class="row">
