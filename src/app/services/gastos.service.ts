@@ -32,5 +32,9 @@ export class GastosService {
   update(gastos: Gasto): Observable<Gasto> {
     return this.http.put<Gasto>(`${environment.url_ms_business}/gastos/${gastos.id}`, gastos);
   }
+
+  listByDuenio(duenios_id: number): Observable<Gasto[]> {
+    return this.http.get<Gasto[]>(`${environment.url_ms_business}/gastos?duenios_id=${duenios_id}}`);
+  }
 }
   

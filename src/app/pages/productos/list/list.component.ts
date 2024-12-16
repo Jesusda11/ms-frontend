@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Producto } from 'src/app/models/producto.model';
 import { ProductoService } from 'src/app/services/producto.service';
 import Swal from 'sweetalert2';
@@ -11,22 +11,40 @@ import Swal from 'sweetalert2';
 })
 export class ListComponent implements OnInit {
 
-  productos:Producto[];
-  constructor(private productosService:ProductoService, private router: Router) {
-    this.productos=[]
+  lote_id: number;
+  cliente_id: number;
+  productos: Producto[];
+
+  constructor(
+    private productosService: ProductoService, 
+    private route: ActivatedRoute, 
+    private router: Router
+  ) {
+    this.productos = [];
   }
 
   ngOnInit(): void {
-    this.list()
+    this.lote_id = this.route.snapshot.params['id'];
+    this.cliente_id = this.route.snapshot.params['cliente_id'];  
+
+    // Analiza la URL actual para decidir qué método ejecutar
+    const currentUrl = this.route.snapshot.url.join('/');
+    if (currentUrl.includes('showProducts')) {
+      this.showProducts();
+    } else if (currentUrl.includes('showProductos')) {
+      this.showProductos(); 
+    } else {
+      this.list();
+    }
   }
 
-  list(){
-    this.productosService.list().subscribe(data=> {
-      this.productos=data
-    })
+  list(): void {
+    this.productosService.list().subscribe(data => {
+      this.productos = data;
+    });
   }
 
-  delete(id: number) {
+  delete(id: number): void {
     Swal.fire({
       title: "Eliminación",
       text: "Está seguro que quiere eliminar este registro?",
@@ -36,29 +54,41 @@ export class ListComponent implements OnInit {
       cancelButtonText: "No,cancelar"
     }).then((result) => {
       if (result.isConfirmed) {
-        this.productosService.delete(id).subscribe(data => {
-          this.ngOnInit()
+        this.productosService.delete(id).subscribe(() => {
+          this.ngOnInit();
           Swal.fire({
             title: "Eliminado",
             text: "Se ha eliminado correctamente",
             icon: "success"
           });
-        })
-
+        });
       }
     });
   }
-  
-  view(id:number){
-    this.router.navigate(["productos/view",id])
+
+  view(id: number): void {
+    this.router.navigate(["productos/view", id]);
   }
 
-  update(id:number){
-    this.router.navigate(["productos/update", id])
+  update(id: number): void {
+    this.router.navigate(["productos/update", id]);
   }
 
-  create(){
-    this.router.navigate(["productos/create"])
+  create(): void {
+    this.router.navigate(["productos/create"]);
   }
 
+  showProducts(): void {
+    this.productosService.listBylot(this.lote_id).subscribe(data => {
+      this.productos = data;
+      console.log(this.productos);
+    });
+  }
+
+  showProductos(): void {
+    this.productosService.listByClient(this.cliente_id).subscribe(data => {
+      this.productos = data;
+      console.log(this.productos);
+    });
+  }
 }

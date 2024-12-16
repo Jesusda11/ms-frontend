@@ -49,7 +49,7 @@
                 <label>Fecha_inicio:</label>
             </div>
             <div class="col-8">
-                <input type="date" class="form-control" [disabled]="mode === 1" [(ngModel)]="contrato.fecha_inicio">
+                <input type="date" class="form-control" [disabled]="mode === 1" [(ngModel)]="contrato.fecha_inico">
             </div>
         </div> 
         <br/>
@@ -71,9 +71,12 @@
                           <button *ngIf="mode==3" class="btn btn-success btn-block" (click)="update()">Actualizar</button>
                       </div>
                   </div>
+                  <div class="row" *ngIf="mode === 1">
+                    <div class="col-4"></div>
+                    <div class="col-8">
+                        <button class="btn btn-primary btn-block" (click)="showCuotas(contrato.id)">Ver cuotas</button>
+                    </div>
                 </div>
-
-
             </div>
         </div>
     </div>

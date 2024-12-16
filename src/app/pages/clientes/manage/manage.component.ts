@@ -105,4 +105,12 @@ export class ManageComponent implements OnInit {
   togglePersonaNatural() {
     this.showPersonaNaturalForm = !this.showPersonaNaturalForm;
   }
+
+  showProductos(id:number){
+    this.router.navigate(["productos/showProductos", + id])
+  }
+
+  showContracts(id:number){
+    this.router.navigate(["contratos/filterByClient", + id ])
+  }
 }

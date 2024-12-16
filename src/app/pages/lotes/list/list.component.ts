@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Lote } from 'src/app/models/lote.model';
 import { LoteService } from 'src/app/services/lote.service';
 import Swal from 'sweetalert2';
@@ -11,13 +11,21 @@ import Swal from 'sweetalert2';
 })
 export class ListComponent implements OnInit {
 
+  ruta_id:number
   lotes:Lote[];
-  constructor(private lotesService:LoteService, private router: Router) {
+  constructor(private lotesService:LoteService, private router: Router, private route: ActivatedRoute) {
     this.lotes=[]
   }
 
   ngOnInit(): void {
-    this.list()
+    this.ruta_id = this.route.snapshot.params['id'];
+
+    const currentUrl = this.route.snapshot.url.join('/');
+    if (currentUrl.includes('filterByRoute')) {
+      this.filterByRoute();
+    } else {
+      this.list();
+    }  
   }
 
   list(){
@@ -59,6 +67,13 @@ export class ListComponent implements OnInit {
 
   create(){
     this.router.navigate(["lotes/create"])
+  }
+
+  filterByRoute(): void{
+    this.lotesService.listByRoute(this.ruta_id).subscribe(data => {
+      this.lotes = data;
+      console.log(this.lotes);
+    });
   }
 
 }

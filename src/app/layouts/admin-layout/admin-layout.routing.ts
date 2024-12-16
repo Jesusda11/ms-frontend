@@ -50,6 +50,7 @@ export const AdminLayoutRoutes: Routes = [
 
       {
         path: 'productos',
+        //canActivate:[AuthenticatedGuard],
         children: [
           {
             path: '',
@@ -60,6 +61,7 @@ export const AdminLayoutRoutes: Routes = [
 
       {
         path: 'lotes',
+        //canActivate:[AuthenticatedGuard],
         children: [
           {
             path: '',
@@ -70,6 +72,7 @@ export const AdminLayoutRoutes: Routes = [
 
       {
         path: 'empresas',
+        //canActivate:[AuthenticatedGuard],
         children: [
           {
             path: '',
@@ -80,6 +83,7 @@ export const AdminLayoutRoutes: Routes = [
 
       {
         path: 'conductores',
+        //canActivate:[AuthenticatedGuard],
         children: [
           {
             path: '',
@@ -90,6 +94,7 @@ export const AdminLayoutRoutes: Routes = [
 
       {
         path: 'turnos',
+        //canActivate:[AuthenticatedGuard],
         children: [
           {
             path: '',
@@ -100,6 +105,7 @@ export const AdminLayoutRoutes: Routes = [
 
       {
         path: 'duenios',
+        //canActivate:[AuthenticatedGuard],
         children: [
           {
             path: '',
@@ -110,6 +116,7 @@ export const AdminLayoutRoutes: Routes = [
 
       {
         path: 'vehiculos',
+        //canActivate:[AuthenticatedGuard],
         children: [
           {
             path: '',
@@ -120,6 +127,7 @@ export const AdminLayoutRoutes: Routes = [
 
       {
         path: 'dueniovehiculos',
+        //canActivate:[AuthenticatedGuard],
         children: [
           {
             path: '',
@@ -130,6 +138,7 @@ export const AdminLayoutRoutes: Routes = [
 
       {
         path: 'vehiculoconductores',
+        //canActivate:[AuthenticatedGuard],
         children: [
           {
             path: '',
@@ -140,6 +149,7 @@ export const AdminLayoutRoutes: Routes = [
 
       {
         path: 'contratos',
+        //canActivate:[AuthenticatedGuard],
         children: [
           {
             path: '',
@@ -150,6 +160,7 @@ export const AdminLayoutRoutes: Routes = [
 
       {
         path: 'rutas',
+        //canActivate:[AuthenticatedGuard],
         children: [
           {
             path: '',
@@ -160,6 +171,7 @@ export const AdminLayoutRoutes: Routes = [
 
       {
         path: 'cuotas',
+        //canActivate:[AuthenticatedGuard],
         children: [
           {
             path: '',
@@ -170,6 +182,7 @@ export const AdminLayoutRoutes: Routes = [
 
       {
         path: 'direcciones',
+        //canActivate:[AuthenticatedGuard],
         children: [
           {
             path: '',
@@ -180,6 +193,7 @@ export const AdminLayoutRoutes: Routes = [
 
       {
         path: 'direccionrutas',
+        //canActivate:[AuthenticatedGuard],
         children: [
           {
             path: '',
@@ -190,6 +204,7 @@ export const AdminLayoutRoutes: Routes = [
 
       {
         path: 'clientes',
+        canActivate:[AuthenticatedGuard],
         children: [
           {
             path: '',
@@ -200,6 +215,7 @@ export const AdminLayoutRoutes: Routes = [
 
       {
         path: 'personanaturales',
+        //canActivate:[AuthenticatedGuard],
         children: [
           {
             path: '',
@@ -210,6 +226,7 @@ export const AdminLayoutRoutes: Routes = [
 
       {
         path: 'facturas',
+        //canActivate:[AuthenticatedGuard],
         children: [
           {
             path: '',
@@ -220,6 +237,7 @@ export const AdminLayoutRoutes: Routes = [
 
       {
         path: 'gastos',
+        //canActivate:[AuthenticatedGuard],
         children: [
           {
             path: '',
@@ -229,6 +247,7 @@ export const AdminLayoutRoutes: Routes = [
       },
       {
         path: 'servicios',
+        //canActivate:[AuthenticatedGuard],
         children: [
           {
             path: '',
@@ -238,6 +257,7 @@ export const AdminLayoutRoutes: Routes = [
       },
       {
         path: 'administradores',
+        //canActivate:[AuthenticatedGuard],
         children: [
           {
             path: '',

@@ -51,6 +51,13 @@
                           <button *ngIf="mode==3" class="btn btn-success btn-block" (click)="update()">Actualizar</button>
                       </div>
                   </div>
+                  <br>
+                  <div class="row" *ngIf="mode === 1">
+                    <div class="col-4"></div>
+                    <div class="col-8">
+                        <button class="btn btn-primary btn-block" (click)="showGastos(duenio['duenio'].id)">Ver gastos</button>
+                    </div>
+                </div>          
                 </div>
 
 

@@ -1,6 +1,6 @@
 
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Gasto } from 'src/app/models/gasto.model';
 import { GastosService } from 'src/app/services/gastos.service';
 import Swal from 'sweetalert2';
@@ -12,12 +12,20 @@ import Swal from 'sweetalert2';
 })
 export class ListComponent implements OnInit {
 
+  duenio_id:number
   gastos: Gasto[] = [];
 
-  constructor(private gastosService: GastosService, private router: Router) {}
+  constructor(private gastosService: GastosService, private router: Router, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
-    this.list();
+    this.duenio_id = this.route.snapshot.params['id'];
+
+    const currentUrl = this.route.snapshot.url.join('/');
+    if (currentUrl.includes('filterByDuenio')) {
+      this.filterByDuenio();
+    } else {
+      this.list();
+    }  
   }
 
   list(): void {
@@ -60,5 +68,11 @@ export class ListComponent implements OnInit {
     this.router.navigate(["gastos/create"]);
   }
 
+  filterByDuenio(): void {
+    this.gastosService.listByDuenio(this.duenio_id).subscribe(data => {
+      this.gastos = data;
+      console.log(this.gastos);
+    });
+  }
   
 }

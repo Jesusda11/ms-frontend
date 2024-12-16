@@ -32,5 +32,9 @@ export class ContratosService {
   update(contratos: Contrato): Observable<Contrato> {
     return this.http.put<Contrato>(`${environment.url_ms_business}/contratos/${contratos.id}`, contratos);
   }
+
+  listByClient(cliente_id: number): Observable<Contrato[]> {
+      return this.http.get<Contrato[]>(`${environment.url_ms_business}/contratos?cliente_id=${cliente_id}}`);
+    }
 }
   
