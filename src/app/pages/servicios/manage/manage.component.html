@@ -5,7 +5,7 @@
 <!-- Page content -->
 <div class="container-fluid mt--7">
     <!-- Table -->
-    <form [formGroup]="theFormGroup" (ngSubmit)="mode === 2 ? create() : update()">
+    <form [formGroup]="theFormGroup" (ngSubmit)="submitForm()">
     <div class="row">
         <div class="col">
             <div class="card shadow">
@@ -15,7 +15,7 @@
                     <h3 *ngIf="mode==3" class="mb-0">Actualizar</h3>
                 </div>
                 <div class="card-body">
-                    <div *ngIf="mode==1" class="row">
+                    <div *ngIf="mode!=2" class="row">
                         <div class="col-4">
                             <label>Id:</label>
                         </div>
@@ -30,7 +30,7 @@
                 <label>Nombre:</label>
             </div>
             <div class="col-8">
-                <input type="text" class="form-control" [disabled]="mode === 1" formControlName="nombre">
+                <input type="text" class="form-control" [disabled]="mode === 1" formControlName="nombre" [ngClass]="{'inputInvalido': trySend && theFormGroup.get('nombre')?.errors}">
             </div>
         </div> 
         <br/>
@@ -40,7 +40,7 @@
                 <label>Direccion:</label>
             </div>
             <div class="col-8">
-                <input type="text" class="form-control" [disabled]="mode === 1" formControlName="direccion">
+                <input type="text" class="form-control" [disabled]="mode === 1" formControlName="direccion" [ngClass]="{'inputInvalido': trySend && theFormGroup.get('direccion')?.errors}">
             </div>
         </div> 
         <br/>
@@ -50,7 +50,7 @@
                 <label>Descripcion:</label>
             </div>
             <div class="col-8">
-                <input type="text" class="form-control" [disabled]="mode === 1" formControlName="descripcion">
+                <input type="text" class="form-control" [disabled]="mode === 1" formControlName="descripcion" [ngClass]="{'inputInvalido': trySend && theFormGroup.get('descripcion')?.errors}">
             </div>
         </div> 
         <br/>
@@ -60,7 +60,7 @@
                 <label>Fecha:</label>
             </div>
             <div class="col-8">
-                <input type="date" class="form-control" [disabled]="mode === 1" formControlName="fecha">
+                <input type="date" class="form-control" [disabled]="mode === 1" formControlName="fecha" [ngClass]="{'inputInvalido': trySend && theFormGroup.get('fecha')?.errors}">
             </div>
         </div> 
 
@@ -71,8 +71,8 @@
                 <label>id administrador:</label>
             </div>
             <div class="col-8">
-                <select class="form-control" [disabled]="mode === 1" formControlName="administrador_id">
-                    <option [value]="admin.id"  *ngFor="let admin of administradores" >{{admin.id}}  {{admin.usuario_name}}</option>
+                <select class="form-control" [disabled]="mode === 1" formControlName="administrador_id" [ngClass]="{'inputInvalido': trySend && theFormGroup.get('estado')?.errors}">
+                    <option [value]="admin.id"  *ngFor="let admin of administradores" >{{admin.id}}. {{admin.usuario_name}}</option>
                 </select>
             </div>
         </div> 
@@ -81,8 +81,8 @@
                     <div class="row">
                       <div class="col-4"></div>
                       <div class="col-8">
-                          <button *ngIf="mode==2" class="btn btn-success btn-block" (click)="create()">Crear</button>
-                          <button *ngIf="mode==3" class="btn btn-success btn-block" (click)="update()">Actualizar</button>
+                          <button *ngIf="mode==2" class="btn btn-success btn-block" type="submit">Crear</button>
+                          <button *ngIf="mode==3" class="btn btn-success btn-block" type="submit">Actualizar</button>
                       </div>
                   </div>
                 </div>

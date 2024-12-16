@@ -44,6 +44,8 @@ export class ManageComponent implements OnInit {
     const currentUrl = this.activateRoute.snapshot.url.join('/');
     if (currentUrl.includes('view')) {
       this.mode = 1;
+      this.theFormGroup.disable(); // Desactiva todos los controles del FormGroup
+
     } else if (currentUrl.includes('create')) {
       this.mode = 2;
     } else if (currentUrl.includes('update')) {
@@ -67,6 +69,7 @@ export class ManageComponent implements OnInit {
 
   configFormGroup() {
     this.theFormGroup = this.theFormBuilder.group({
+      id: [{ value: '', disabled: true }],
       nombre: ['', [Validators.required, Validators.minLength(3)]],
       direccion: ['', [Validators.required]],
       descripcion: ['', [Validators.required]],
@@ -83,87 +86,79 @@ export class ManageComponent implements OnInit {
     this.serviciosService.view(id).subscribe(data => {
       this.servicio = data;
       this.servicio.fecha = this.servicio.fecha.split("T")[0];
+      console.log(this.servicio);
+      
       this.theFormGroup.patchValue(this.servicio);
     });
   }
 
-  create() {
+  
+  submitForm() {
+    if (!this.validateForm()) return;
+
+    const serviceData = this.theFormGroup.getRawValue();
+
+    if (this.mode === 2) {
+      this.serviciosService.create(serviceData).subscribe(() => {
+        Swal.fire("Creado", "Se ha creado exitosamente", "success");
+        this.router.navigate(["servicios/list"]);
+      });
+    } else if (this.mode === 3) {
+      this.serviciosService.update(serviceData).subscribe(() => {
+        Swal.fire("Actualizado", "Se ha actualizado exitosamente", "success");
+        this.router.navigate(["servicios/list"]);
+      });
+    }
+  }
+
+
+  validateForm(): boolean {
     this.trySend = false;
 
     if (this.theFormGroup.invalid) {
       this.trySend = true;
 
-      // Validación específica por campo
       if (this.theFormGroup.get('nombre')?.errors) {
-        this.showFieldError('nombre', 'Campo Nombre', 'El nombre es obligatorio y debe tener al menos 3 caracteres.', this.nombreInput);
-        return;
+        this.showFieldError('Campo Nombre', 'El nombre es obligatorio y debe tener al menos 3 caracteres.');
+        return false;
       }
 
       if (this.theFormGroup.get('direccion')?.errors) {
-        this.showFieldError('direccion', 'Campo Dirección', 'La dirección es obligatoria.', this.direccionInput);
-        return;
+        this.showFieldError('Campo Dirección', 'La dirección es obligatoria.');
+        return false;
       }
 
       if (this.theFormGroup.get('descripcion')?.errors) {
-        this.showFieldError('descripcion', 'Campo Descripción', 'La descripción es obligatoria.', this.descripcionInput);
-        return;
+        this.showFieldError('Campo Descripción', 'La descripción es obligatoria.');
+        return false;
       }
 
       if (this.theFormGroup.get('fecha')?.errors) {
-        this.showFieldError('fecha', 'Campo Fecha', 'La fecha es obligatoria.', this.fechaInput);
-        return;
+        this.showFieldError('Campo Fecha', 'La fecha es obligatoria.');
+        return false;
       }
 
       if (this.theFormGroup.get('administrador_id')?.errors) {
-        this.showFieldError('administrador_id', 'Campo Administrador', 'Selecciona un administrador válido.', this.administradorInput);
-        return;
+        this.showFieldError('Campo Administrador', 'Selecciona un administrador válido.');
+        return false;
       }
 
       // Error genérico
       Swal.fire('Error en el formulario', 'Corrige los errores antes de continuar.', 'error');
-      return;
+      return false;
     }
 
-    const servicio = this.theFormGroup.value;
-    this.serviciosService.create(servicio).subscribe(() => {
-      Swal.fire("Creado", "Se ha creado exitosamente", "success");
-      this.router.navigate(["servicios/list"]);
-    });
+    return true;
   }
 
-  private showFieldError(
-    fieldName: string,
-    title: string,
-    message: string,
-    inputRef: ElementRef
-  ) {
-    let timerInterval;
+  private showFieldError(title: string, message: string) {
     Swal.fire({
       icon: "warning",
       title: title,
       html: message,
       timer: 2000,
       timerProgressBar: true,
-      showConfirmButton: false,
-      willClose: () => {
-        clearInterval(timerInterval);
-      }
-    }).then(() => {
-      setTimeout(() => {
-        inputRef.nativeElement.focus();
-      }, 500);
-    });
-  }
-
-  update() {
-    if (this.theFormGroup.invalid) {
-      this.trySend = true;
-      Swal.fire("Error en el formulario", "Ingrese correctamente los datos");
-      return;
-    }
-    this.serviciosService.update(this.theFormGroup.value).subscribe(() => {
-      Swal.fire("Actualizado", "Se ha actualizado exitosamente", "success");
-      this.router.navigate(["servicios/list"]);
+      showConfirmButton: false
     });
   }
 }
