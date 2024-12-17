@@ -24,7 +24,7 @@ export class ClientesService {
     return this.http.get<Cliente>(`${environment.url_ms_business}/clientes/${id}`);
   }
 
-  create(clientes: Cliente): Observable<Cliente> {
+  create(clientes: any): Observable<Cliente> {
     delete clientes.id;
     return this.http.post<Cliente>(`${environment.url_ms_business}/clientes`, clientes);
   }

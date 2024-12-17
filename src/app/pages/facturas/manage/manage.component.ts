@@ -1,10 +1,13 @@
-
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Factura } from 'src/app/models/factura.model';
+import { Administrador } from 'src/app/models/administrador.model';
+import { AdministradoresService } from 'src/app/services/administradores.service';
 import { FacturasService } from 'src/app/services/facturas.service';
+import { UsuariosService } from 'src/app/services/usuarios.service';
 import Swal from 'sweetalert2';
+import { log } from 'node:console';
 
 @Component({
   selector: 'app-manage',
@@ -12,135 +15,133 @@ import Swal from 'sweetalert2';
   styleUrls: ['./manage.component.scss']
 })
 export class ManageComponent implements OnInit {
-  @ViewChild('fechaInput') fechaInput!: ElementRef;
-  @ViewChild('totalInput') totalInput!: ElementRef;
-  @ViewChild('estadoInput') estadoInput!: ElementRef;
 
-  factura:Factura
-  //mode=1 --> view, mode=2 -->create, mode=3 -->Update
-  mode:number
-  theFormGroup:FormGroup  // Es el que hace cumplir las reglas
-  trySend:boolean  
-  constructor(private  facturasService:FacturasService, //
-              private activateRoute:ActivatedRoute, //Me sirve para analizar la URL de la página, que quieren hacer en el momento
-              private router:Router, //Me ayuda a gestionar los archivos del routing/moverme entre componentes
-              private theFormBuilder:FormBuilder //congreso
-  ) { 
-    this.factura={fecha: '',total: 0,estado: '',id: 0,}
-    this.mode=0
-    this.trySend=false
-    this.configFormGroup()
+  factura: Factura;
+  administradores: Administrador[] = [];
+  mode: number; // 1=view, 2=create, 3=update
+  theFormGroup: FormGroup;
+  trySend: boolean;
+
+  constructor(
+    private facturasService: FacturasService,
+    private administradoresService: AdministradoresService,
+    private usuariosService: UsuariosService,
+    private activateRoute: ActivatedRoute,
+    private router: Router,
+    private theFormBuilder: FormBuilder
+  ) {
+    this.factura = { id: 0, total: 0, fecha: "", estado:""};
+    this.mode = 0;
+    this.trySend = false;
+    this.configFormGroup();
   }
 
   ngOnInit(): void {
-    const currentUrl = this.activateRoute.snapshot.url.join('/'); //Tome foto de L url 
-    if (currentUrl.includes('view')) { 
+    const currentUrl = this.activateRoute.snapshot.url.join('/');
+    if (currentUrl.includes('view')) {
       this.mode = 1;
+      this.theFormGroup.disable(); 
     } else if (currentUrl.includes('create')) {
       this.mode = 2;
     } else if (currentUrl.includes('update')) {
       this.mode = 3;
     }
-    if (this.activateRoute.snapshot.params.id) { //Tomele foto necesito el id
-      this.factura.id = this.activateRoute.snapshot.params.id
-      this.getFactura(this.factura.id)
+
+    if (this.activateRoute.snapshot.params.id) {
+      this.factura.id = this.activateRoute.snapshot.params.id;
+      this.getfactura(this.factura.id);
     }
+
+    this.administradoresService.list().subscribe(data => {
+      this.administradores = data;
+      this.administradores.forEach(admin => {
+        this.usuariosService.view(admin.usuario_id).subscribe(usuario => {
+          admin.usuario_name = usuario.name;
+        });
+      });
+    });
   }
 
   configFormGroup() {
     this.theFormGroup = this.theFormBuilder.group({
-      fecha: ['', Validators.required], // Fecha obligatoria
-      total: [0, [Validators.required, Validators.min(0)]], // Total debe ser >= 0
-      estado: ['', [Validators.required]]// Estado requerido
+      id: [{ value: '', disabled: true }],
+      fecha: ['', [Validators.required]],
+      total: ['', [Validators.required, Validators.min(0)]],
+      estado: ['', [Validators.required]]  
     });
   }
-  
-  get getTheFormGroup(){
-    return this.theFormGroup.controls
-  } //Esto devuelve realmente una variable
 
-  getFactura(id:number){
-    this.facturasService.view(id).subscribe(data =>{
-      this.factura = data
-      this.factura.fecha = this.factura.fecha.split("T")[0]
+  get getTheFormGroup() {
+    return this.theFormGroup.controls;
+  }
+
+  getfactura(id: number) {
+    this.facturasService.view(id).subscribe(data => {
+      this.factura = data;
+      this.factura.fecha = this.factura.fecha.split("T")[0];
       this.theFormGroup.patchValue(this.factura);
-    })
+    });
   }
 
-  create() {
-    this.trySend=false
-    // Verificar si el formulario es inválido
-    if (this.theFormGroup.invalid) {
-      this.trySend = true;
+
+    submitForm() {
+      if (!this.validateForm()) return;
   
-      if (this.theFormGroup.get('fecha')?.errors) {
-        this.showFieldError('fecha', 'Campo fecha', 'Ingresa una fecha 📅', this.fechaInput);
-        return;
+      const facturaData = this.theFormGroup.getRawValue();
+  
+      if (this.mode === 2) {
+        this.facturasService.create(facturaData).subscribe(() => {
+          Swal.fire("Creado", "Se ha creado exitosamente", "success");
+          this.router.navigate(["facturas/list"]);
+        });
+      } else if (this.mode === 3) {
+        this.facturasService.update(facturaData).subscribe(() => {
+          Swal.fire("Actualizado", "Se ha actualizado exitosamente", "success");
+          this.router.navigate(["facturas/list"]);
+        });
       }
-
-      if (this.theFormGroup.get('total')?.errors) {
-
-        if(this.theFormGroup.get('total')?.errors?.['required']){
-          this.showFieldError('total', 'Campo Total', 'Ingresa un total 💸', this.totalInput); // Enfoca el input de total
-        }else if(this.theFormGroup.get('total')?.errors?.['min']){
-          this.showFieldError('total', 'Campo Total', 'valor minimo es 0 💸', this.totalInput); // Enfoca el input de total
+    }
+  
+  
+    validateForm(): boolean {
+      this.trySend = false;
+  
+      if (this.theFormGroup.invalid) {
+        this.trySend = true;
+  
+  
+        if (this.theFormGroup.get('estado')?.errors) {
+          this.showFieldError('Campo estado', 'La dirección es obligatoria.');
+          return false;
         }
-        
-        return; 
+  
+        if (this.theFormGroup.get('fecha')?.errors) {
+          this.showFieldError('Campo Fecha', 'La fecha es obligatoria.');
+          return false;
+        }
+  
+        if (this.theFormGroup.get('total')?.errors) {
+          this.showFieldError('Campo total', 'ingrese un total válido.');
+          return false;
+        }
+  
+        // Error genérico
+        Swal.fire('Error en el formulario', 'Corrige los errores antes de continuar.', 'error');
+        return false;
       }
   
-      if (this.theFormGroup.get('estado')?.errors) {
-        this.showFieldError('estado', 'Campo Estado', 'Ingresa un estado', this.estadoInput);
-        return; 
-      }
-      // Mostrar un error genérico si hay errores que no fueron específicos
-      Swal.fire('Error en el formulario', 'Corrige los errores antes de continuar.', 'error');
-      return;
+      return true;
     }
   
-    const factura = this.theFormGroup.value; // Obtiene valores del FormGroup
-    this.facturasService.create(factura).subscribe(data => {
-      Swal.fire("Creado", "Se ha creado exitosamente", "success");
-      this.router.navigate(["facturas/list"]);
-    });
-  }
-  
-
-  private showFieldError(
-    fieldName: string,
-    title: string,
-    message: string,
-    inputRef: ElementRef
-  ) {
-    let timerInterval;
-    Swal.fire({
-      icon: "warning",
-      title: title,
-      html: message,
-      timer: 2000,
-      timerProgressBar: true,
-      showConfirmButton: false,
-      willClose: () => {
-        clearInterval(timerInterval);
-      }
-    }).then(() => {
-      // Usar un setTimeout para garantizar el foco correcto después de cerrar la alerta
-      setTimeout(() => {
-        inputRef.nativeElement.focus();
-      }, 500); // Ajusta el tiempo si es necesario
-    });
-  }  
-
-  update(){
-    if(this.theFormGroup.invalid){
-      this.trySend=true
-      Swal.fire("Error en el formulario", "Ingrese correctamente los datos")
-      return
+    private showFieldError(title: string, message: string) {
+      Swal.fire({
+        icon: "warning",
+        title: title,
+        html: message,
+        timer: 2000,
+        timerProgressBar: true,
+        showConfirmButton: false
+      });
     }
-    this.facturasService.update(this.factura).subscribe(data =>{
-      Swal.fire("Actualizado", "Se ha actualizado exitosamente","success")
-      this.router.navigate(["facturas/list"])
-    })
-  }
 
 }

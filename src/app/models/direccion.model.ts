@@ -1,7 +1,6 @@
 export class Direccion {
   barrio: string;
-  tipo_calle?: string;
-  tipoCalle:string
+  tipo_calle: string;
   calle: string;
   numero: number;
   piso: string;

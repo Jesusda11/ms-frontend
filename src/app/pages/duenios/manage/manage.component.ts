@@ -1,9 +1,13 @@
-
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { log } from 'node:console';
+import { Conductor } from 'src/app/models/conductor.model';
 import { Duenio } from 'src/app/models/duenio.model';
+import { Usuario } from 'src/app/models/usuario.model';
+import { ConductorService } from 'src/app/services/conductor.service';
 import { DueniosService } from 'src/app/services/duenios.service';
+import { UsuariosService } from 'src/app/services/usuarios.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -12,81 +16,142 @@ import Swal from 'sweetalert2';
   styleUrls: ['./manage.component.scss']
 })
 export class ManageComponent implements OnInit {
-  duenio:Duenio
-  //mode=1 --> view, mode=2 -->create, mode=3 -->Update
-  mode:number
-  theFormGroup:FormGroup  // Es el que hace cumplir las reglas
-  trySend:boolean  
-  constructor(private  dueniosService:DueniosService, //
-              private activateRoute:ActivatedRoute, //Me sirve para analizar la URL de la página, que quieren hacer en el momento
-              private router:Router, //Me ayuda a gestionar los archivos del routing/moverme entre componentes
-              private theFormBuilder:FormBuilder //congreso
-  ) { 
-    this.duenio={id: 0,conductor_id: 0,usuario_id: ''}
-    this.mode=0
-    this.trySend=false
-    this.configFormGroup()
+  duenio: Duenio;
+  usuarios: Usuario[] = []
+  conductores: Conductor[] = []
+  mode: number; // 1=view, 2=create, 3=update
+  theFormGroup: FormGroup;
+  trySend: boolean;
+
+  constructor(
+    private dueniosService: DueniosService,
+    private usuariosService: UsuariosService,
+    private conductoresService: ConductorService,
+    private activateRoute: ActivatedRoute,
+    private router: Router,
+    private theFormBuilder: FormBuilder
+  ) {
+    this.duenio = { id: 0, conductor_id: 0, usuario_id: '' };
+    this.mode = 0;
+    this.trySend = false;
+    this.configFormGroup();
   }
 
   ngOnInit(): void {
-    const currentUrl = this.activateRoute.snapshot.url.join('/'); //Tome foto de L url 
+    const currentUrl = this.activateRoute.snapshot.url.join('/'); 
     if (currentUrl.includes('view')) { 
       this.mode = 1;
+      this.theFormGroup.disable();
     } else if (currentUrl.includes('create')) {
       this.mode = 2;
     } else if (currentUrl.includes('update')) {
       this.mode = 3;
     }
-    if (this.activateRoute.snapshot.params.id) { //Tomele foto necesito el id
-      this.duenio.id = this.activateRoute.snapshot.params.id
-      this.getDuenio(this.duenio.id)
+
+    if (this.activateRoute.snapshot.params.id) { 
+      this.duenio.id = this.activateRoute.snapshot.params.id;
+      this.getDuenio(this.duenio.id);
+    }
+
+    this.usuariosService.list().subscribe(data => {
+      this.usuarios = data;
+    });
+
+    this.conductoresService.list().subscribe(data => {
+      this.conductores = data;
+      this.conductores.forEach(conductor =>{
+        this.usuariosService.view(conductor.usuario_id).subscribe((usuario) => {
+          conductor.usuario_name = usuario.name;
+        });
+      })
+    });
+   
+  }
+
+  configFormGroup() {
+    this.theFormGroup = this.theFormBuilder.group({
+      id: [{ value: '', disabled: true }],
+      conductor_id: [0, [Validators.required]],
+      usuario_id: ['', [Validators.required]],
+    });
+  }
+
+  get getTheFormGroup() {
+    return this.theFormGroup.controls;
+  }
+
+  getDuenio(id: number) {
+    this.dueniosService.view(id).subscribe(data => {
+      this.duenio = data;    
+      this.theFormGroup.patchValue(this.duenio["duenio"]);
+    });
+  }
+
+  submitForm() {
+    if (!this.validateForm()) return;
+
+    const formData = this.theFormGroup.getRawValue();
+
+    if (this.mode === 2) {
+      this.dueniosService.create(formData).subscribe(() => {
+        Swal.fire({
+          icon: 'success',
+          title: 'Creado',
+          text: 'El dueño se ha creado exitosamente.',
+        });
+        this.router.navigate(['duenios/list']);
+      });
+    } else if (this.mode === 3) {
+      this.dueniosService.update(formData).subscribe(() => {
+        Swal.fire({
+          icon: 'success',
+          title: 'Actualizado',
+          text: 'El dueño se ha actualizado exitosamente.',
+        });
+        this.router.navigate(['duenios/list']);
+      });
     }
   }
 
-  configFormGroup(){
-    this.theFormGroup=this.theFormBuilder.group({
-      // primer elemento del vector, valor por defecto
-      // lista, serán las reglas
-      //capacity:[0,[Validators.required,Validators.min(1),Validators.max(100)]], //La lista son las reglas para aplicar a dicho campo
-    })
-  }
-  get getTheFormGroup(){
-    return this.theFormGroup.controls
-  } //Esto devuelve realmente una variable
+  validateForm(): boolean {
+    this.trySend = false;
 
-  getDuenio(id:number){
-    this.dueniosService.view(id).subscribe(data =>{
-      this.duenio = data
-      console.log(this.duenio["duenio"])
-    })
-  }
+    if (this.theFormGroup.invalid) {
+      this.trySend = true;
 
-  create(){
-    if(this.theFormGroup.invalid){
-      this.trySend=true
-      Swal.fire("Error en el formulario", "Ingrese correctamente los datos")
-      return
+      if (this.theFormGroup.get('conductor_id')?.errors) {
+        this.showFieldError('Campo Conductor', 'El conductor es obligatorio');
+        return false;
+      }
+
+      if (this.theFormGroup.get('usuario_id')?.errors) {
+        this.showFieldError('Campo Usuario', 'El usuario es obligatorio');
+        return false;
+      }
+
+      Swal.fire({
+        icon: 'error',
+        title: 'Error en el formulario',
+        text: 'Por favor, corrige los errores antes de continuar.',
+      });
+      return false;
     }
-    this.dueniosService.create(this.duenio).subscribe(data =>{
-      Swal.fire("Creado", "Se ha creado exitosamente","success")
-      this.router.navigate(["duenios/list"])
-    })
+
+    return true;
   }
 
-  update(){
-    if(this.theFormGroup.invalid){
-      this.trySend=true
-      Swal.fire("Error en el formulario", "Ingrese correctamente los datos")
-      return
-    }
-    this.dueniosService.update(this.duenio).subscribe(data =>{
-      Swal.fire("Actualizado", "Se ha actualizado exitosamente","success")
-      this.router.navigate(["duenios/list"])
-    })
+  private showFieldError(title: string, message: string) {
+    Swal.fire({
+      icon: 'warning',
+      title: title,
+      text: message,
+      timer: 3000,
+      timerProgressBar: true,
+      showConfirmButton: false,
+    });
   }
 
   showGastos(id:number){
     this.router.navigate(["gastos/filterByDuenio", + id ])
   }
-
 }

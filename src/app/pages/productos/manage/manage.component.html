@@ -4,6 +4,7 @@
 <!-- Page content -->
 <div class="container-fluid mt--7">
     <!-- Table -->
+    <form [formGroup]="theFormGroup" (ngSubmit)="submitForm()">
     <div class="row">
         <div class="col">
             <div class="card shadow">
@@ -13,12 +14,12 @@
                     <h3 *ngIf="mode==3" class="mb-0">Actualizar</h3>
                 </div>
                 <div class="card-body">
-                    <div class="row">
+                    <div *ngIf="mode!=2" class="row">
                         <div class="col-4">
                             <label>Id:</label>
                         </div>
                         <div class="col-8">
-                            <input type="text" class="form-control" disabled [(ngModel)]="producto.id">
+                            <input type="text" class="form-control" disabled formControlName="id">
                         </div>
                     </div>
                     <br>
@@ -27,7 +28,7 @@
                             <label>Nombre:</label>
                         </div>
                         <div class="col-8">
-                            <input type="text" [disabled]="mode === 1" class="form-control" [(ngModel)]="producto.nombre">
+                            <input type="text" [disabled]="mode === 1" class="form-control" formControlName="nombre" [ngClass]="{'inputInvalido': trySend && theFormGroup.get('nombre')?.errors}">
                         </div>
                     </div>
                     <br>
@@ -36,7 +37,7 @@
                             <label>Cantidad:</label>
                         </div>
                         <div class="col-8">
-                            <input type="number" [disabled]="mode === 1"  class="form-control" [(ngModel)]="producto.cantidad">
+                            <input type="number" [disabled]="mode === 1"  class="form-control" formControlName="cantidad" [ngClass]="{'inputInvalido': trySend && theFormGroup.get('cantidad')?.errors}">
                         </div>
                     </div>
                     <br>
@@ -45,7 +46,7 @@
                             <label>Peso:</label>
                         </div>
                         <div class="col-8">
-                            <input type="number" [disabled]="mode === 1" class="form-control" [(ngModel)]="producto.peso">
+                            <input type="number" [disabled]="mode === 1" class="form-control" formControlName="peso" [ngClass]="{'inputInvalido': trySend && theFormGroup.get('peso')?.errors}">
                         </div>
                     </div>
                     <br>
@@ -54,7 +55,9 @@
                             <label>lote_id:</label>
                         </div>
                         <div class="col-8">
-                            <input type="number" [disabled]="mode === 1" class="form-control" [(ngModel)]="producto.lote_id">
+                            <select class="form-control" [disabled]="mode === 1" formControlName="lote_id" [ngClass]="{'inputInvalido': trySend && theFormGroup.get('lote_id')?.errors}">
+                                <option [value]="lote.id"  *ngFor="let lote of lotes" >{{lote.id}} \ {{lote.tipo_carga}}</option>
+                            </select>
                         </div>
                     </div>
                     <br>
@@ -63,15 +66,17 @@
                             <label>cliente_id</label>
                         </div>
                         <div class="col-8">
-                            <input type="number" [disabled]="mode === 1" class="form-control" [(ngModel)]="producto.cliente_id">
+                            <select class="form-control" [disabled]="mode === 1" formControlName="cliente_id" [ngClass]="{'inputInvalido': trySend && theFormGroup.get('cliente_id')?.errors}">
+                                <option [value]="cliente.cliente_id"  *ngFor="let cliente of clientes" >{{cliente.cliente_id}}.  {{cliente.usuario_name}} </option>
+                            </select>
                         </div>
                     </div>
                     <br>
                     <div class="row">
                         <div class="col-4"></div>
                         <div class="col-8">
-                            <button *ngIf="mode==2" class="btn btn-success btn-block" (click)="create()">Crear</button>
-                            <button *ngIf="mode==3" class="btn btn-success btn-block" (click)="update()">Actualizar</button>
+                            <button *ngIf="mode==2" class="btn btn-success btn-block" type="submit">Crear</button>
+                            <button *ngIf="mode==3" class="btn btn-success btn-block" type="submit">Actualizar</button>
                         </div>
                     </div>
                 </div>
@@ -80,4 +85,5 @@
             </div>
         </div>
     </div>
+    </form> 
 </div>

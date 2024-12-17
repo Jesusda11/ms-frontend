@@ -1,9 +1,12 @@
-
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Contrato } from 'src/app/models/contrato.model';
 import { Ruta } from 'src/app/models/ruta.model';
+import { Vehiculo } from 'src/app/models/vehiculo.model';
+import { ContratosService } from 'src/app/services/contratos.service';
 import { RutasService } from 'src/app/services/rutas.service';
+import { VehiculosService } from 'src/app/services/vehiculos.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -12,79 +15,139 @@ import Swal from 'sweetalert2';
   styleUrls: ['./manage.component.scss']
 })
 export class ManageComponent implements OnInit {
-  ruta:Ruta
-  //mode=1 --> view, mode=2 -->create, mode=3 -->Update
-  mode:number
-  theFormGroup:FormGroup  // Es el que hace cumplir las reglas
-  trySend:boolean  
-  constructor(private  rutasService:RutasService, //
-              private activateRoute:ActivatedRoute, //Me sirve para analizar la URL de la página, que quieren hacer en el momento
-              private router:Router, //Me ayuda a gestionar los archivos del routing/moverme entre componentes
-              private theFormBuilder:FormBuilder //congreso
-  ) { 
-    this.ruta={id: 0,contrato_id: 0,vehiculo_id: 0,lugar_inicio: '',lugar_fin: '',distancia: 0,}
-    this.mode=0
-    this.trySend=false
-    this.configFormGroup()
+  ruta: Ruta;
+  contratos: Contrato[] = []
+  vehiculos: Vehiculo[] = []
+  mode: number; // 1: view, 2: create, 3: update
+  theFormGroup: FormGroup; // FormGroup para validaciones
+  trySend: boolean; // Para mostrar errores cuando se intenta enviar el formulario sin éxito
+
+  constructor(
+    private rutasService: RutasService,
+    private vehiculosService: VehiculosService,
+    private contratosService: ContratosService,
+    private activateRoute: ActivatedRoute,
+    private router: Router,
+    private theFormBuilder: FormBuilder
+  ) {
+    this.ruta = { id: 0, contrato_id: 0, vehiculo_id: 0, lugar_inicio: '', lugar_fin: '', distancia: 0 };
+    this.mode = 0;
+    this.trySend = false;
+    this.configFormGroup();
   }
 
   ngOnInit(): void {
-    const currentUrl = this.activateRoute.snapshot.url.join('/'); //Tome foto de L url 
-    if (currentUrl.includes('view')) { 
+    const currentUrl = this.activateRoute.snapshot.url.join('/');
+    if (currentUrl.includes('view')) {
       this.mode = 1;
+      this.theFormGroup.disable();
     } else if (currentUrl.includes('create')) {
       this.mode = 2;
     } else if (currentUrl.includes('update')) {
       this.mode = 3;
     }
-    if (this.activateRoute.snapshot.params.id) { //Tomele foto necesito el id
-      this.ruta.id = this.activateRoute.snapshot.params.id
-      this.getRuta(this.ruta.id)
+    if (this.activateRoute.snapshot.params.id) {
+      this.ruta.id = this.activateRoute.snapshot.params.id;
+      this.getRuta(this.ruta.id);
+    }
+
+    this.contratosService.list().subscribe(data => {
+      this.contratos = data;
+    });
+
+    this.vehiculosService.list().subscribe(data => {
+      this.vehiculos = data;
+    });
+  }
+
+  configFormGroup() {
+    this.theFormGroup = this.theFormBuilder.group({
+      id: [{ value: '', disabled: true }],
+      contrato_id: [0, [Validators.required, Validators.min(1)]],
+      vehiculo_id: [0, [Validators.required, Validators.min(1)]],
+      lugar_inicio: ['', [Validators.required, Validators.minLength(3)]],
+      lugar_fin: ['', [Validators.required, Validators.minLength(3)]],
+      distancia: [0, [Validators.required, Validators.min(1)]],
+    });
+  }
+
+  get getTheFormGroup() {
+    return this.theFormGroup.controls;
+  }
+
+  getRuta(id: number) {
+    this.rutasService.view(id).subscribe(data => {
+      this.ruta = data;
+      this.theFormGroup.patchValue(this.ruta);
+    });
+  }
+
+  submitForm() {
+    if (!this.validateForm()) return;
+
+    const serviceData = this.theFormGroup.getRawValue();
+
+    if (this.mode === 2) {
+      this.rutasService.create(serviceData).subscribe(() => {
+        Swal.fire('Creado', 'La ruta se ha creado exitosamente', 'success');
+        this.router.navigate(['rutas/list']);
+      });
+    } else if (this.mode === 3) {
+      this.rutasService.update(serviceData).subscribe(() => {
+        Swal.fire('Actualizado', 'La ruta se ha actualizado exitosamente', 'success');
+        this.router.navigate(['rutas/list']);
+      });
     }
   }
 
-  configFormGroup(){
-    this.theFormGroup=this.theFormBuilder.group({
-      // primer elemento del vector, valor por defecto
-      // lista, serán las reglas
-      //capacity:[0,[Validators.required,Validators.min(1),Validators.max(100)]], //La lista son las reglas para aplicar a dicho campo
-    })
-  }
-  get getTheFormGroup(){
-    return this.theFormGroup.controls
-  } //Esto devuelve realmente una variable
+  validateForm(): boolean {
+    this.trySend = false;
 
-  getRuta(id:number){
-    this.rutasService.view(id).subscribe(data =>{
-      this.ruta = data
-      
-    })
-  }
+    if (this.theFormGroup.invalid) {
+      this.trySend = true;
 
-  create(){
-    if(this.theFormGroup.invalid){
-      this.trySend=true
-      Swal.fire("Error en el formulario", "Ingrese correctamente los datos")
-      return
+      if (this.theFormGroup.get('contrato_id')?.errors) {
+        this.showFieldError('Contrato ID', 'El contrato ID es obligatorio y debe ser mayor a 0.');
+        return false;
+      }
+
+      if (this.theFormGroup.get('vehiculo_id')?.errors) {
+        this.showFieldError('Vehículo ID', 'El vehículo ID es obligatorio y debe ser mayor a 0.');
+        return false;
+      }
+
+      if (this.theFormGroup.get('lugar_inicio')?.errors) {
+        this.showFieldError('Lugar de Inicio', 'El lugar de inicio es obligatorio y debe tener al menos 3 caracteres.');
+        return false;
+      }
+
+      if (this.theFormGroup.get('lugar_fin')?.errors) {
+        this.showFieldError('Lugar de Fin', 'El lugar de fin es obligatorio y debe tener al menos 3 caracteres.');
+        return false;
+      }
+
+      if (this.theFormGroup.get('distancia')?.errors) {
+        this.showFieldError('Distancia', 'La distancia es obligatoria y debe ser mayor a 0.');
+        return false;
+      }
+
+      Swal.fire('Error en el formulario', 'Corrige los errores antes de continuar.', 'error');
+      return false;
     }
-    this.rutasService.create(this.ruta).subscribe(data =>{
-      Swal.fire("Creado", "Se ha creado exitosamente","success")
-      this.router.navigate(["rutas/list"])
-    })
+
+    return true;
   }
 
-  update(){
-    if(this.theFormGroup.invalid){
-      this.trySend=true
-      Swal.fire("Error en el formulario", "Ingrese correctamente los datos")
-      return
-    }
-    this.rutasService.update(this.ruta).subscribe(data =>{
-      Swal.fire("Actualizado", "Se ha actualizado exitosamente","success")
-      this.router.navigate(["rutas/list"])
-    })
+  private showFieldError(title: string, message: string) {
+    Swal.fire({
+      icon: 'warning',
+      title: title,
+      html: message,
+      timer: 2000,
+      timerProgressBar: true,
+      showConfirmButton: false
+    });
   }
-
   showlots(id:number){
     this.router.navigate(["lotes/filterByRoute", + id])
   }

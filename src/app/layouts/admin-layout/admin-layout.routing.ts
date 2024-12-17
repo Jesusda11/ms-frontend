@@ -269,5 +269,14 @@ export const AdminLayoutRoutes: Routes = [
           }
         ]
       },
+      {
+        path: 'usuarios',
+        children: [
+          {
+            path: '',
+            loadChildren: () => import('src/app/pages/usuarios/usuarios.module').then(m => m.UsuariosModule)
+          }
+        ]
+      },
       /* AUTO-ROUTES */
 ];

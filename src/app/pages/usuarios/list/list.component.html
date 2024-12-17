@@ -8,24 +8,29 @@
         <div class="col">
             <div class="card shadow">
                 <div class="card-header border-0">
-                    <h3 class="mb-0">Clientes</h3> 
+                    <h3 class="mb-0">Usuarios</h3> 
                     <button type="button" class="btn btn-success" (click)="create()">Crear</button>   
                 </div>
                <div class="card-body">
                 <table class="table">
                     <thead>
                         <tr>
-<th scope="col">Preferencias</th>
+                          <th scope="col">Name</th>
+<th scope="col">Email</th>
+<th scope="col">Password</th>
 <th scope="col">Id</th>
 
                           <th scope="col">Opciones</th>
                         </tr>
                       </thead>
                       <tbody>
-                        <tr *ngFor="let actual of clientes">
+                        <tr *ngFor="let actual of usuarios">
                             
+    <td>{{actual.name}}</td>
   
-    <td>{{actual.preferencias}}</td>
+    <td>{{actual.email}}</td>
+  
+    <td>{{actual.password}}</td>
   
     <td>{{actual.id}}</td>
   
