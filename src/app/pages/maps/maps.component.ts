@@ -1,56 +1,85 @@
-import { Component, OnInit } from '@angular/core';
-declare const google: any;
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { VehiculosService } from 'src/app/services/vehiculos.service';
+import { Vehiculo } from 'src/app/models/vehiculo.model';
+import * as L from 'leaflet';
+import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-maps',
+  selector: 'app-map',
   templateUrl: './maps.component.html',
   styleUrls: ['./maps.component.scss']
 })
-export class MapsComponent implements OnInit {
+export class MapsComponent implements OnInit, OnDestroy {
+  vehiculo!: Vehiculo; // Información del vehículo
+  map!: L.Map; // Referencia al mapa
+  marker!: L.Marker; // Marcador en el mapa
+  vehicleId!: number; // ID del vehículo
+  updateInterval!: any; // Intervalo para actualizar la ubicación
+  vehiculoSubscription!: Subscription; // Suscripción al servicio de vehículos
 
-  constructor() { }
+  constructor(
+    private route: ActivatedRoute,
+    private vehiculosService: VehiculosService
+  ) {}
 
-  ngOnInit() {
-    let map = document.getElementById('map-canvas');
-    let lat = map.getAttribute('data-lat');
-    let lng = map.getAttribute('data-lng');
+  ngOnInit(): void {
+    this.vehicleId = Number(this.route.snapshot.paramMap.get('id'));
 
-    var myLatlng = new google.maps.LatLng(lat, lng);
-    var mapOptions = {
-        zoom: 12,
-        scrollwheel: false,
-        center: myLatlng,
-        mapTypeId: google.maps.MapTypeId.ROADMAP,
-        styles: [
-          {"featureType":"administrative","elementType":"labels.text.fill","stylers":[{"color":"#444444"}]},
-          {"featureType":"landscape","elementType":"all","stylers":[{"color":"#f2f2f2"}]},
-          {"featureType":"poi","elementType":"all","stylers":[{"visibility":"off"}]},
-          {"featureType":"road","elementType":"all","stylers":[{"saturation":-100},{"lightness":45}]},
-          {"featureType":"road.highway","elementType":"all","stylers":[{"visibility":"simplified"}]},
-          {"featureType":"road.arterial","elementType":"labels.icon","stylers":[{"visibility":"off"}]},
-          {"featureType":"transit","elementType":"all","stylers":[{"visibility":"off"}]},
-          {"featureType":"water","elementType":"all","stylers":[{"color":'#5e72e4'},{"visibility":"on"}]}]
+    if (this.vehicleId) {
+      this.vehiculosService.view(this.vehicleId).subscribe((vehiculo) => {
+        this.vehiculo = vehiculo;
+        this.initMap(vehiculo.latitud, vehiculo.longitud);
+        this.startLocationUpdates();
+      });
     }
-
-    map = new google.maps.Map(map, mapOptions);
-
-    var marker = new google.maps.Marker({
-        position: myLatlng,
-        map: map,
-        animation: google.maps.Animation.DROP,
-        title: 'Hello World!'
-    });
-
-    var contentString = '<div class="info-window-content"><h2>Argon Dashboard</h2>' +
-        '<p>A beautiful Dashboard for Bootstrap 4. It is Free and Open Source.</p></div>';
-
-    var infowindow = new google.maps.InfoWindow({
-        content: contentString
-    });
-
-    google.maps.event.addListener(marker, 'click', function() {
-        infowindow.open(map, marker);
-    });
   }
 
+  // Inicializa el mapa
+  initMap(lat: number, lng: number): void {
+    this.map = L.map('map').setView([lat, lng], 13);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(this.map);
+
+    // Crear ícono personalizado
+    const vehicleIcon = L.icon({
+      iconUrl: 'assets/img/icons/truck-icon.png', // Ruta del ícono
+      iconSize: [32, 32],  // Tamaño del ícono
+      iconAnchor: [16, 32],  // Ancla del ícono
+      popupAnchor: [0, -32]  // Ajuste del popup
+    });
+
+    // Crear marcador para el vehículo con el ícono personalizado
+    this.marker = L.marker([lat, lng], { icon: vehicleIcon }).addTo(this.map)
+      .bindPopup(`Vehículo: ${this.vehiculo.matricula}`)
+      .openPopup();
+  }
+
+  // Inicia el intervalo para actualizar la ubicación del vehículo
+  startLocationUpdates(): void {
+    this.updateInterval = setInterval(() => {
+      this.vehiculosService.view(this.vehicleId).subscribe((vehiculo) => {
+        if (this.vehiculo && this.marker) {
+          // Actualizar la posición si es diferente
+          if (vehiculo.latitud !== this.vehiculo.latitud || vehiculo.longitud !== this.vehiculo.longitud) {
+            this.vehiculo = vehiculo;
+            this.marker.setLatLng([vehiculo.latitud, vehiculo.longitud]);
+            this.marker.bindPopup(`Vehículo: ${vehiculo.matricula}`).openPopup();
+          }
+        }
+      });
+    }, 100); // Actualiza cada .1 segundos (ajustable)
+  }
+
+  // Detiene la actualización cuando el componente se destruye
+  ngOnDestroy(): void {
+    if (this.updateInterval) {
+      clearInterval(this.updateInterval);
+    }
+    if (this.vehiculoSubscription) {
+      this.vehiculoSubscription.unsubscribe();
+    }
+  }
 }

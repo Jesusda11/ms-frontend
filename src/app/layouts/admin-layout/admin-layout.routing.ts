@@ -13,6 +13,10 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'icons',          component: IconsComponent },
     { path: 'maps',           component: MapsComponent },
 
+    // Ruta dinámica para mostrar el mapa basado en el id del vehículo
+    { path: 'map/:id', component: MapsComponent },
+
+
     {
         path: 'theaters',
         children: [
