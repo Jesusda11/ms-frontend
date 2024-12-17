@@ -63,7 +63,6 @@ export class ManageComponent implements OnInit {
   configFormGroup() {
     this.theFormGroup = this.theFormBuilder.group({
       id: [{ value: '', disabled: true }],
-      fechaRegistro: ['', [Validators.required]],
       preferencias: ['', [Validators.required, Validators.minLength(3)]],
       nacionalidad: [''],
       genero: [''],
@@ -102,7 +101,9 @@ export class ManageComponent implements OnInit {
   getCliente(id: number) {
     this.clientesService.view(id).subscribe(data => {
       this.cliente = data;
-      this.cliente.fechaRegistro = this.cliente.fechaRegistro.split('T')[0];
+      console.log("data: ", data);
+      console.log("cliente: ", this.cliente);
+
       this.theFormGroup.patchValue(this.cliente);
     });
   }

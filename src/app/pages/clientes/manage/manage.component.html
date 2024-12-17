@@ -7,16 +7,11 @@
         <h3 *ngIf="mode === 3">Actualizar</h3>
       </div>
       <div class="card-body">
-        <div class="form-group">
-          <label>Fecha de Registro:</label>
-          <input
-            type="date"
-            class="form-control"
-            formControlName="fechaRegistro"
-            [ngClass]="{'inputInvalido': trySend && theFormGroup.get('fechaRegistro')?.errors}"
-          />
+        <div *ngIf="mode!=2"  class="form-group">
+          <label>Id:</label>
+          <input type="text" class="form-control" disabled formControlName="id" [ngClass]="{'inputInvalido': trySend && theFormGroup.get('id')?.errors}">
         </div>
-  
+      <br/>
         <div class="form-group">
           <label>Preferencias:</label>
           <input
@@ -27,13 +22,13 @@
           />
         </div>
   
-        <div>
+        <div *ngIf="mode==2">
           <label>¿Agregar Persona Natural?</label>
           <button class="btn btn-primary" type="button" (click)="togglePersonaNatural()">
             {{ showPersonaNaturalForm ? 'Ocultar' : 'Agregar' }}
           </button>
         </div>
-  
+        
         <div *ngIf="showPersonaNaturalForm">
           <h5>Datos de Persona Natural</h5>
           <div class="form-group">

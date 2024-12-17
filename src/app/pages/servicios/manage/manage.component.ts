@@ -86,7 +86,6 @@ export class ManageComponent implements OnInit {
     this.serviciosService.view(id).subscribe(data => {
       this.servicio = data;
       this.servicio.fecha = this.servicio.fecha.split("T")[0];
-      
       this.theFormGroup.patchValue(this.servicio);
     });
   }

@@ -3,6 +3,7 @@
 <!-- Page content -->
 <div class="container-fluid mt--7">
     <!-- Table -->
+    <form [formGroup]="theFormGroup" (ngSubmit)="submitForm()"> 
     <div class="row">
         <div class="col">
             <div class="card shadow">
@@ -12,12 +13,12 @@
                     <h3 *ngIf="mode==3" class="mb-0">Actualizar</h3>
                 </div>
                 <div class="card-body">
-                    <div class="row">
+                    <div *ngIf="mode!=2" class="row">
                         <div class="col-4">
                             <label>Id:</label>
                         </div>
                         <div class="col-8">
-                            <input type="text" class="form-control" disabled [(ngModel)]="lote.id">
+                            <input type="text" class="form-control" disabled formControlName="id">
                         </div>
                     </div>
                     <br>
@@ -27,13 +28,12 @@
                         </div>
                         <div class="col-8">
                             <!-- Cambia el binding [(ngModel)] según el modo -->
-                            <input
-                                type="text"
-                                [disabled]="mode === 1"
-                                class="form-control"
-                                [ngModel]="mode === 1 ?lote.tipo_de_carga : lote.tipoDeCarga"
-                                (ngModelChange)="mode === 1 ?  lote.tipo_de_carga  = $event : lote.tipoDeCarga  = $event"
-                            >
+                            <select class="form-control" [disabled]="mode === 1" formControlName="tipo_carga" [ngClass]="{'inputInvalido': trySend && theFormGroup.get('tipo_carga')?.errors}">
+                                <option value="alimentosPerecederos">Alimentos perecederos</option>
+                                <option value="refrigerada">Refrigerada</option>
+                                <option value="liquidos">liquidos</option>
+                                <option value="general">General</option>
+                            </select>
                         </div>
                     </div>
                     <br>
@@ -42,28 +42,31 @@
                             <label>Peso:</label>
                         </div>
                         <div class="col-8">
-                            <input type="number" [disabled]="mode === 1" class="form-control" [(ngModel)]="lote.peso">
+                            <input type="number" [disabled]="mode === 1" class="form-control" formControlName="peso" [ngClass]="{'inputInvalido': trySend && theFormGroup.get('peso')?.errors}">
                         </div>
                     </div>
                     <br>
                     <div class="row">
                         <div class="col-4">
-                            <label>Ruta:</label>
+                            <label>Ruta id:</label>
                         </div>
                         <div class="col-8">
-                            <input type="number" [disabled]="mode === 1" class="form-control" [(ngModel)]="lote.ruta_id">
+                            <select class="form-control" [disabled]="mode === 1" formControlName="ruta_id" [ngClass]="{'inputInvalido': trySend && theFormGroup.get('ruta_id')?.errors}">
+                                <option [value]="ruta.id"  *ngFor="let ruta of rutas" >{{ruta.id}}. {{ruta.lugar_inicio}} -> {{ruta.lugar_fin}}</option>
+                            </select>
                         </div>
                     </div>
                     <br>
                     <div class="row">
                         <div class="col-4"></div>
                         <div class="col-8">
-                            <button *ngIf="mode==2" class="btn btn-success btn-block" (click)="create()">Crear</button>
-                            <button *ngIf="mode==3" class="btn btn-success btn-block" (click)="update()">Actualizar</button>
+                            <button *ngIf="mode==2" class="btn btn-success btn-block" type="submit">Crear</button>
+                            <button *ngIf="mode==3" class="btn btn-success btn-block" type="submit">Actualizar</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    </form>
 </div>

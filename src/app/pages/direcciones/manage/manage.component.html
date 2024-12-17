@@ -5,6 +5,7 @@
 <!-- Page content -->
 <div class="container-fluid mt--7">
     <!-- Table -->
+    <form [formGroup]="theFormGroup" (ngSubmit)="submitForm()">
     <div class="row">
         <div class="col">
             <div class="card shadow">
@@ -14,12 +15,12 @@
                     <h3 *ngIf="mode==3" class="mb-0">Actualizar</h3>
                 </div>
                 <div class="card-body">
-                    <div *ngIf="mode==1" class="row">
+                    <div *ngIf="mode!=2" class="row">
                         <div class="col-4">
                             <label>Id:</label>
                         </div>
                         <div class="col-8">
-                            <input type="text" class="form-control" disabled [(ngModel)]="direccion.id">
+                            <input type="text" class="form-control" disabled formControlName="id" >
                         </div>
                     </div>
                     <br>
@@ -29,7 +30,7 @@
                 <label>Barrio:</label>
             </div>
             <div class="col-8">
-                <input type="text" class="form-control" [disabled]="mode === 1" [(ngModel)]="direccion.barrio">
+                <input type="text" class="form-control" [disabled]="mode === 1" formControlName="barrio" [ngClass]="{'inputInvalido': trySend && theFormGroup.get('barrio')?.errors}">
             </div>
         </div> 
         <br/>
@@ -39,22 +40,11 @@
                 <label>Tipo_calle:</label>
             </div>
             <div class="col-8">
-                <!--
-                <input 
-                    type="text" 
-                    class="form-control" 
-                    [disabled]="mode === 1"
-                    [ngModel]="mode === 2 ? direccion.tipoCalle : direccion.tipo_calle"
-                    (ngModelChange)="mode === 2 ? direccion.tipoCalle = $event : direccion.tipo_calle = $event"> -->
-
-                    <!-- -->
                     <input 
                     type="text" 
                     class="form-control" 
                     [disabled]="mode === 1"
-                    [ngModel]="mode === 1 ? direccion.tipo_calle : direccion.tipoCalle"
-                    (ngModelChange)="mode === 1 ? direccion.tipo_calle = $event : direccion.tipoCalle  = $event">
-
+                    formControlName="tipo_calle" [ngClass]="{'inputInvalido': trySend && theFormGroup.get('tipo_calle')?.errors}">
             </div>
         </div>
         <br/>
@@ -65,7 +55,7 @@
                 <label>Calle:</label>
             </div>
             <div class="col-8">
-                <input type="text" class="form-control" [disabled]="mode === 1" [(ngModel)]="direccion.calle">
+                <input type="text" class="form-control" [disabled]="mode === 1" formControlName="calle" [ngClass]="{'inputInvalido': trySend && theFormGroup.get('calle')?.errors}">
             </div>
         </div> 
         <br/>
@@ -75,7 +65,7 @@
                 <label>Numero:</label>
             </div>
             <div class="col-8">
-                <input type="number" class="form-control" [disabled]="mode === 1" [(ngModel)]="direccion.numero">
+                <input type="number" class="form-control" [disabled]="mode === 1" formControlName="numero" [ngClass]="{'inputInvalido': trySend && theFormGroup.get('numero')?.errors}">
             </div>
         </div> 
         <br/>
@@ -85,7 +75,7 @@
                 <label>Piso:</label>
             </div>
             <div class="col-8">
-                <input type="text" class="form-control" [disabled]="mode === 1" [(ngModel)]="direccion.piso">
+                <input type="text" class="form-control" [disabled]="mode === 1" formControlName="piso" [ngClass]="{'inputInvalido': trySend && theFormGroup.get('piso')?.errors}">
             </div>
         </div> 
         <br/>
@@ -95,7 +85,7 @@
                 <label>Municipio_id:</label>
             </div>
             <div class="col-8">
-                <input type="number" class="form-control" [disabled]="mode === 1" [(ngModel)]="direccion.municipio_id">
+                <input type="number" value="1" class="form-control" [disabled]="mode === 1" formControlName="municipio_id" [ngClass]="{'inputInvalido': trySend && theFormGroup.get('municipio_id')?.errors}">
             </div>
         </div> 
         <br/>
@@ -103,8 +93,8 @@
                     <div class="row">
                       <div class="col-4"></div>
                       <div class="col-8">
-                          <button *ngIf="mode==2" class="btn btn-success btn-block" (click)="create()">Crear</button>
-                          <button *ngIf="mode==3" class="btn btn-success btn-block" (click)="update()">Actualizar</button>
+                          <button *ngIf="mode==2" class="btn btn-success btn-block" type="submit">Crear</button>
+                          <button *ngIf="mode==3" class="btn btn-success btn-block" type="submit">Actualizar</button>
                       </div>
                   </div>
                 </div>
@@ -113,4 +103,5 @@
             </div>
         </div>
     </div>
+    </form>
 </div>

@@ -5,6 +5,7 @@
 <!-- Page content -->
 <div class="container-fluid mt--7">
     <!-- Table -->
+    <form [formGroup]="theFormGroup" (ngSubmit)="submitForm()">
     <div class="row">
         <div class="col">
             <div class="card shadow">
@@ -14,12 +15,12 @@
                     <h3 *ngIf="mode==3" class="mb-0">Actualizar</h3>
                 </div>
                 <div class="card-body">
-                    <div *ngIf="mode==1" class="row">
+                    <div *ngIf="mode!=2" class="row">
                         <div class="col-4">
                             <label>Id:</label>
                         </div>
                         <div class="col-8">
-                            <input type="text" class="form-control" disabled [(ngModel)]="direccionruta.id">
+                            <input type="text" class="form-control" disabled formControlName="id">
                         </div>
                     </div>
                     <br>
@@ -29,7 +30,9 @@
                 <label>Direccion_id:</label>
             </div>
             <div class="col-8">
-                <input type="number" class="form-control" [disabled]="mode === 1" [(ngModel)]="direccionruta.direccion_id">
+                <select class="form-control" [disabled]="mode === 1" formControlName="direccion_id" [ngClass]="{'inputInvalido': trySend && theFormGroup.get('direccion_id')?.errors}">
+                    <option [value]="direccion.id"  *ngFor="let direccion of direcciones" >{{direccion.id}}</option>
+                </select>
             </div>
         </div> 
         <br/>
@@ -39,7 +42,9 @@
                 <label>Ruta_id:</label>
             </div>
             <div class="col-8">
-                <input type="number" class="form-control" [disabled]="mode === 1" [(ngModel)]="direccionruta.ruta_id">
+                <select class="form-control" [disabled]="mode === 1" formControlName="ruta_id" [ngClass]="{'inputInvalido': trySend && theFormGroup.get('ruta_id')?.errors}">
+                    <option [value]="ruta.id"  *ngFor="let ruta of rutas" >{{ruta.id}}</option>
+                </select>
             </div>
         </div> 
         <br/>
@@ -49,7 +54,9 @@
                 <label>Lote_id:</label>
             </div>
             <div class="col-8">
-                <input type="number" class="form-control" [disabled]="mode === 1" [(ngModel)]="direccionruta.lote_id">
+                <select class="form-control" [disabled]="mode === 1" formControlName="lote_id" [ngClass]="{'inputInvalido': trySend && theFormGroup.get('lote_id')?.errors}">
+                    <option [value]="lote.id"  *ngFor="let lote of lotes" >{{lote.id}}</option>
+                </select>
             </div>
         </div> 
         <br/>
@@ -59,20 +66,11 @@
                 <label>Fecha de Entrega:</label>
             </div>
             <div class="col-8">
-                <!--
                 <input 
                     type="date" 
                     class="form-control" 
                     [disabled]="mode === 1"
-                    [ngModel]="mode === 2 ? direccionruta.fechaEntrega : direccionruta.fecha_entrega"
-                    (ngModelChange)="mode === 2 ? direccionruta.fechaEntrega = $event : direccionruta.fecha_entrega = $event"> 
-                -->
-                <input 
-                    type="date" 
-                    class="form-control" 
-                    [disabled]="mode === 1"
-                    [ngModel]="mode === 1 ? direccionruta.fecha_entrega : direccionruta.fechaEntrega"
-                    (ngModelChange)="mode === 1 ? direccionruta.fecha_entrega = $event : direccionruta.fechaEntrega = $event"> 
+                    formControlName="fecha_entrega" [ngClass]="{'inputInvalido': trySend && theFormGroup.get('fecha_entrega')?.errors}">
             </div>
         </div>
         <br/>
@@ -83,7 +81,7 @@
                 <label>Distancia:</label>
             </div>
             <div class="col-8">
-                <input type="number" class="form-control" [disabled]="mode === 1" [(ngModel)]="direccionruta.distancia">
+                <input type="number" class="form-control" [disabled]="mode === 1" formControlName="distancia" [ngClass]="{'inputInvalido': trySend && theFormGroup.get('distancia')?.errors}">
             </div>
         </div> 
         <br/>
@@ -93,7 +91,7 @@
                 <label>Estado:</label>
             </div>
             <div class="col-8">
-                <input type="text" class="form-control" [disabled]="mode === 1" [(ngModel)]="direccionruta.estado">
+                <input type="text" class="form-control" [disabled]="mode === 1" formControlName="estado" [ngClass]="{'inputInvalido': trySend && theFormGroup.get('estado')?.errors}">
             </div>
         </div> 
         <br/>
@@ -107,16 +105,16 @@
                 type="number" 
                 class="form-control" 
                 [disabled]="mode === 1"
-                [ngModel]="mode === 2 ? direccionruta.ordenDePaso : direccionruta.orden_de_paso"
-                (ngModelChange)="mode === 2 ? direccionruta.ordenDePaso = $event : direccionruta.orden_de_paso = $event">            </div>
+                formControlName="orden_de_paso" [ngClass]="{'inputInvalido': trySend && theFormGroup.get('orden_de_paso')?.errors}">
+            </div>
         </div> 
         <br/>
         
                     <div class="row">
                       <div class="col-4"></div>
                       <div class="col-8">
-                          <button *ngIf="mode==2" class="btn btn-success btn-block" (click)="create()">Crear</button>
-                          <button *ngIf="mode==3" class="btn btn-success btn-block" (click)="update()">Actualizar</button>
+                          <button *ngIf="mode==2" class="btn btn-success btn-block" type="submit">Crear</button>
+                          <button *ngIf="mode==3" class="btn btn-success btn-block" type="submit">Actualizar</button>
                       </div>
                   </div>
                 </div>
@@ -125,4 +123,5 @@
             </div>
         </div>
     </div>
+    </form>
 </div>

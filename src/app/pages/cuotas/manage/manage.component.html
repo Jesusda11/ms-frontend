@@ -5,6 +5,7 @@
 <!-- Page content -->
 <div class="container-fluid mt--7">
     <!-- Table -->
+    <form [formGroup]="theFormGroup" (ngSubmit)="submitForm()"> 
     <div class="row">
         <div class="col">
             <div class="card shadow">
@@ -14,7 +15,7 @@
                     <h3 *ngIf="mode==3" class="mb-0">Actualizar</h3>
                 </div>
                 <div class="card-body">
-                    <div *ngIf="mode==1" class="row">
+                    <div *ngIf="mode!=2" class="row">
                         <div class="col-4">
                             <label>Id:</label>
                         </div>
@@ -29,17 +30,21 @@
                 <label>Contrato_id:</label>
             </div>
             <div class="col-8">
-                <input type="number" class="form-control" [disabled]="mode === 1" [(ngModel)]="cuota.contrato_id">
+            <select class="form-control" [disabled]="mode === 1" formControlName="contrato_id" [ngClass]="{'inputInvalido': trySend && theFormGroup.get('contrato_id')?.errors}">
+                <option [value]="contrato.id"  *ngFor="let contrato of contratos" >{{contrato.id}}</option>
+            </select>
             </div>
         </div> 
         <br/>
-        
+
         <div class="row">
             <div class="col-4">
                 <label>Factura_id:</label>
             </div>
             <div class="col-8">
-                <input type="number" class="form-control" [disabled]="mode === 1" [(ngModel)]="cuota.factura_id">
+            <select class="form-control" [disabled]="mode === 1" formControlName="factura_id" [ngClass]="{'inputInvalido': trySend && theFormGroup.get('factura_id')?.errors}">
+                <option [value]="factura.id"  *ngFor="let factura of facturas" >{{factura.id}}</option>
+            </select>
             </div>
         </div> 
         <br/>
@@ -49,7 +54,7 @@
                 <label>Monto:</label>
             </div>
             <div class="col-8">
-                <input type="number" class="form-control" [disabled]="mode === 1" [(ngModel)]="cuota.monto">
+                <input type="number" class="form-control" [disabled]="mode === 1" formControlName="monto" [ngClass]="{'inputInvalido': trySend && theFormGroup.get('monto')?.errors}">
             </div>
         </div> 
         <br/>
@@ -59,7 +64,7 @@
                 <label>Tasa_interes:</label>
             </div>
             <div class="col-8">
-                <input type="number" class="form-control" [disabled]="mode === 1" [(ngModel)]="cuota.tasa_interes">
+                <input type="number" class="form-control" [disabled]="mode === 1" formControlName="tasa_interes" [ngClass]="{'inputInvalido': trySend && theFormGroup.get('tasa_interes')?.errors}">
             </div>
         </div> 
         <br/>
@@ -69,7 +74,7 @@
                 <label>Fecha_generacion:</label>
             </div>
             <div class="col-8">
-                <input type="date" class="form-control" [disabled]="mode === 1" [(ngModel)]="cuota.fecha_generacion">
+                <input type="date" class="form-control" [disabled]="mode === 1" formControlName="fecha_generacion" [ngClass]="{'inputInvalido': trySend && theFormGroup.get('fecha_generacion')?.errors}">
             </div>
         </div> 
         <br/>
@@ -79,7 +84,7 @@
                 <label>Fecha_vencimiento:</label>
             </div>
             <div class="col-8">
-                <input type="date" class="form-control" [disabled]="mode === 1" [(ngModel)]="cuota.fecha_vencimiento">
+                <input type="date" class="form-control" [disabled]="mode === 1" formControlName="fecha_vencimiento" [ngClass]="{'inputInvalido': trySend && theFormGroup.get('fecha_vencimiento')?.errors}">
             </div>
         </div> 
         <br/>
@@ -87,8 +92,8 @@
                     <div class="row">
                       <div class="col-4"></div>
                       <div class="col-8">
-                          <button *ngIf="mode==2" class="btn btn-success btn-block" (click)="create()">Crear</button>
-                          <button *ngIf="mode==3" class="btn btn-success btn-block" (click)="update()">Actualizar</button>
+                          <button *ngIf="mode==2" class="btn btn-success btn-block" type="submit">Crear</button>
+                          <button *ngIf="mode==3" class="btn btn-success btn-block" type="submit">Actualizar</button>
                       </div>
                   </div>
                 </div>
@@ -97,4 +102,5 @@
             </div>
         </div>
     </div>
+    </form>
 </div>
