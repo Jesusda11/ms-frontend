@@ -87,4 +87,8 @@ export class ManageComponent implements OnInit {
     })
   }
 
+  showProducts(id:number){
+    this.router.navigate(["productos/showProducts", + id])
+  }
+
 }

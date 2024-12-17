@@ -1,0 +1,74 @@
+
+<div class="header bg-gradient-danger pb-8 pt-5 pt-md-8">
+
+</div>
+<!-- Page content -->
+<div class="container-fluid mt--7">
+    <!-- Table -->
+    <form [formGroup]="theFormGroup" (ngSubmit)="mode === 2 ? create() : update()">
+    <div class="row">
+        <div class="col">
+            <div class="card shadow">
+                <div class="card-header border-0">
+                    <h3 *ngIf="mode==1" class="mb-0">Visualizar</h3>
+                    <h3 *ngIf="mode==2" class="mb-0">Crear</h3>
+                    <h3 *ngIf="mode==3" class="mb-0">Actualizar</h3>
+                </div>
+                <div class="card-body">
+                    <div *ngIf="mode==1" class="row">
+                        <div class="col-4">
+                            <label>Id:</label>
+                        </div>
+                        <div class="col-8">
+                            <input type="text" class="form-control" disabled formControlName="id">
+                        </div>
+                    </div>
+                    <br>
+                    
+        <div class="row">
+            <div class="col-4">
+                <label>Fecha:</label>
+            </div>
+            <div class="col-8">
+                <input type="date" class="form-control" [disabled]="mode === 1" formControlName="fecha" #fechaInput [ngClass]="{'inputInvalido': trySend && theFormGroup.get('fecha')?.errors}">
+            </div>
+        </div> 
+        <br/>
+        
+        <div class="row">
+            <div class="col-4">
+                <label>Total:</label>
+            </div>
+            <div class="col-8">
+                <input type="number"  min="0" class="form-control" [disabled]="mode === 1" formControlName="total" #totalInput [ngClass]="{'inputInvalido': trySend && theFormGroup.get('total')?.errors}"   >
+            </div>
+        </div> 
+        <br/>
+        
+        <div class="row">
+            <div class="col-4">
+                <label>Estado:</label>
+            </div>
+            <div class="col-8">
+                <select class="form-control" [disabled]="mode === 1" formControlName="estado" [ngClass]="{'inputInvalido': trySend && theFormGroup.get('estado')?.errors}">
+                    <option value="aceptado">Aceptado</option>
+                    <option value="rechazado">Rechazado</option>
+                    <option value="pendiente">Pendiente</option>
+                </select>
+            </div>
+        </div> 
+        <br/>
+
+                    <div class="row">
+                      <div class="col-4"></div>
+                      <div class="col-8">
+                          <button *ngIf="mode==2" class="btn btn-success btn-block" (click)="create()">Crear</button>
+                          <button *ngIf="mode==3" class="btn btn-success btn-block" (click)="update()">Actualizar</button>
+                      </div>
+                  </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+</div>

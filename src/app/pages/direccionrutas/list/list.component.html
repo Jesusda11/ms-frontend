@@ -1,0 +1,53 @@
+
+<div class="header bg-gradient-danger pb-8 pt-5 pt-md-8">
+</div>
+<!-- Page content -->
+<div class="container-fluid mt--7">
+    <!-- Table -->
+    <div class="row">
+        <div class="col">
+            <div class="card shadow">
+                <div class="card-header border-0">
+                    <h3 class="mb-0">Direccion x Rutas</h3> 
+                    <button type="button" class="btn btn-success" (click)="create()">Crear</button>   
+                </div>
+               <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Id</th>
+                            <th scope="col">Direccion_id</th>
+                            <th scope="col">Ruta_id</th>
+                            <th scope="col">Lote_id</th>
+                            <th scope="col">Fecha_entrega</th>
+                            <th scope="col">Distancia</th>
+                            <th scope="col">Estado</th>
+                            <th scope="col">Orden_de_paso</th>
+                            <th scope="col">Opciones</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let actual of direccionrutas">
+                            <td>{{actual.id}}</td>
+                            <td>{{actual.direccion_id}}</td>
+                            <td>{{actual.ruta_id}}</td>
+                            <td>{{actual.lote_id}}</td>
+                            <td>{{actual.fecha_entrega | date: 'yyyy-MM-dd' }}</td>
+                            <td>{{actual.distancia}}</td>
+                            <td>{{actual.estado}}</td>
+                            <td>{{actual.orden_de_paso}}</td>
+  
+  
+                            <td>
+                                <button type="button" class="btn btn-success" (click)="view(actual.id)">View</button>
+                                <button type="button" class="btn btn-warning" (click)="update(actual.id)">Edit</button>
+                                <button type="button" class="btn btn-danger" (click)="delete(actual.id)">Del</button>
+                            </td>
+                        </tr>
+                      </tbody>
+                </table>
+               </div>
+            </div>
+        </div>
+    </div>
+</div>

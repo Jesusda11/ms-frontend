@@ -85,4 +85,8 @@ export class ManageComponent implements OnInit {
     })
   }
 
+  showlots(id:number){
+    this.router.navigate(["lotes/filterByRoute", + id])
+  }
+
 }

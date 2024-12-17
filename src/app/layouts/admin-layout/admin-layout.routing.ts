@@ -5,13 +5,17 @@ import { IconsComponent } from '../../pages/icons/icons.component';
 import { MapsComponent } from '../../pages/maps/maps.component';
 import { UserProfileComponent } from '../../pages/user-profile/user-profile.component';
 import { TablesComponent } from '../../pages/tables/tables.component';
+import { AuthenticatedGuard } from 'src/app/guards/authenticated.guard';
+import { LoginComponent } from 'src/app/pages/login/login.component';
+import { NoAuthenticatedGuard } from 'src/app/guards/no-authenticated.guard';
 
 export const AdminLayoutRoutes: Routes = [
     { path: 'dashboard',      component: DashboardComponent },
-    { path: 'user-profile',   component: UserProfileComponent },
+    { path: 'user-profile', canActivate:[AuthenticatedGuard],  component: UserProfileComponent },
     { path: 'tables',         component: TablesComponent },
     { path: 'icons',          component: IconsComponent },
     { path: 'maps',           component: MapsComponent },
+    {path: 'login', canActivate:[NoAuthenticatedGuard],  component:LoginComponent},
 
     // Ruta dinámica para mostrar el mapa basado en el id del vehículo
     { path: 'map/:id', component: MapsComponent },
@@ -39,6 +43,7 @@ export const AdminLayoutRoutes: Routes = [
 
       {
         path: 'categorias',
+        canActivate:[AuthenticatedGuard],
         children: [
           {
             path: '',
@@ -49,6 +54,7 @@ export const AdminLayoutRoutes: Routes = [
 
       {
         path: 'productos',
+        //canActivate:[AuthenticatedGuard],
         children: [
           {
             path: '',
@@ -59,6 +65,7 @@ export const AdminLayoutRoutes: Routes = [
 
       {
         path: 'lotes',
+        //canActivate:[AuthenticatedGuard],
         children: [
           {
             path: '',
@@ -69,6 +76,7 @@ export const AdminLayoutRoutes: Routes = [
 
       {
         path: 'empresas',
+        //canActivate:[AuthenticatedGuard],
         children: [
           {
             path: '',
@@ -79,6 +87,7 @@ export const AdminLayoutRoutes: Routes = [
 
       {
         path: 'conductores',
+        //canActivate:[AuthenticatedGuard],
         children: [
           {
             path: '',
@@ -89,6 +98,7 @@ export const AdminLayoutRoutes: Routes = [
 
       {
         path: 'turnos',
+        //canActivate:[AuthenticatedGuard],
         children: [
           {
             path: '',
@@ -99,6 +109,7 @@ export const AdminLayoutRoutes: Routes = [
 
       {
         path: 'duenios',
+        //canActivate:[AuthenticatedGuard],
         children: [
           {
             path: '',
@@ -109,6 +120,7 @@ export const AdminLayoutRoutes: Routes = [
 
       {
         path: 'vehiculos',
+        //canActivate:[AuthenticatedGuard],
         children: [
           {
             path: '',
@@ -119,6 +131,7 @@ export const AdminLayoutRoutes: Routes = [
 
       {
         path: 'dueniovehiculos',
+        //canActivate:[AuthenticatedGuard],
         children: [
           {
             path: '',
@@ -129,6 +142,7 @@ export const AdminLayoutRoutes: Routes = [
 
       {
         path: 'vehiculoconductores',
+        //canActivate:[AuthenticatedGuard],
         children: [
           {
             path: '',
@@ -139,6 +153,7 @@ export const AdminLayoutRoutes: Routes = [
 
       {
         path: 'contratos',
+        //canActivate:[AuthenticatedGuard],
         children: [
           {
             path: '',
@@ -149,6 +164,7 @@ export const AdminLayoutRoutes: Routes = [
 
       {
         path: 'rutas',
+        //canActivate:[AuthenticatedGuard],
         children: [
           {
             path: '',
@@ -159,6 +175,7 @@ export const AdminLayoutRoutes: Routes = [
 
       {
         path: 'cuotas',
+        //canActivate:[AuthenticatedGuard],
         children: [
           {
             path: '',
@@ -167,5 +184,90 @@ export const AdminLayoutRoutes: Routes = [
         ]
       },
 
-      
+      {
+        path: 'direcciones',
+        //canActivate:[AuthenticatedGuard],
+        children: [
+          {
+            path: '',
+            loadChildren: () => import('src/app/pages/direcciones/direcciones.module').then(m => m.DireccionesModule)
+          }
+        ]
+      },
+
+      {
+        path: 'direccionrutas',
+        //canActivate:[AuthenticatedGuard],
+        children: [
+          {
+            path: '',
+            loadChildren: () => import('src/app/pages/direccionrutas/direccionrutas.module').then(m => m.DireccionrutasModule)
+          }
+        ]
+      },
+
+      {
+        path: 'clientes',
+        canActivate:[AuthenticatedGuard],
+        children: [
+          {
+            path: '',
+            loadChildren: () => import('src/app/pages/clientes/clientes.module').then(m => m.ClientesModule)
+          }
+        ]
+      },
+
+      {
+        path: 'personanaturales',
+        //canActivate:[AuthenticatedGuard],
+        children: [
+          {
+            path: '',
+            loadChildren: () => import('src/app/pages/personanaturales/personanaturales.module').then(m => m.PersonanaturalesModule)
+          }
+        ]
+      },
+
+      {
+        path: 'facturas',
+        //canActivate:[AuthenticatedGuard],
+        children: [
+          {
+            path: '',
+            loadChildren: () => import('src/app/pages/facturas/facturas.module').then(m => m.FacturasModule)
+          }
+        ]
+      },
+
+      {
+        path: 'gastos',
+        //canActivate:[AuthenticatedGuard],
+        children: [
+          {
+            path: '',
+            loadChildren: () => import('src/app/pages/gastos/gastos.module').then(m => m.GastosModule)
+          }
+        ]
+      },
+      {
+        path: 'servicios',
+        //canActivate:[AuthenticatedGuard],
+        children: [
+          {
+            path: '',
+            loadChildren: () => import('src/app/pages/servicios/servicios.module').then(m => m.ServiciosModule)
+          }
+        ]
+      },
+      {
+        path: 'administradores',
+        //canActivate:[AuthenticatedGuard],
+        children: [
+          {
+            path: '',
+            loadChildren: () => import('src/app/pages/administradores/administradores.module').then(m => m.AdministradoresModule)
+          }
+        ]
+      },
+      /* AUTO-ROUTES */
 ];

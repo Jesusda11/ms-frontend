@@ -22,7 +22,7 @@ export class ManageComponent implements OnInit {
               private router:Router, //Me ayuda a gestionar los archivos del routing/moverme entre componentes
               private theFormBuilder:FormBuilder //congreso
   ) { 
-    this.contrato={id: 0,cliente_id: 0,valor: 0,fecha_inicio: '',fecha_fin: '',}
+    this.contrato={id: 0,cliente_id: 0,valor: 0,fecha_inico: '',fecha_fin: '',}
     this.mode=0
     this.trySend=false
     this.configFormGroup()
@@ -57,7 +57,7 @@ export class ManageComponent implements OnInit {
   getContrato(id:number){
     this.contratosService.view(id).subscribe(data =>{
       this.contrato = data
-      this.contrato.fecha_inicio = this.contrato.fecha_inicio.split("T")[0]
+      this.contrato.fecha_inico = this.contrato.fecha_inico.split("T")[0]
 this.contrato.fecha_fin = this.contrato.fecha_fin.split("T")[0]
 
     })
@@ -85,6 +85,10 @@ this.contrato.fecha_fin = this.contrato.fecha_fin.split("T")[0]
       Swal.fire("Actualizado", "Se ha actualizado exitosamente","success")
       this.router.navigate(["contratos/list"])
     })
+  }
+
+  showCuotas(id:number){
+    this.router.navigate(["/cuotas/filter", + id])
   }
 
 }

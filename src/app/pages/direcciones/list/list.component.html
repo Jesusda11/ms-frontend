@@ -1,0 +1,58 @@
+
+<div class="header bg-gradient-danger pb-8 pt-5 pt-md-8">
+</div>
+<!-- Page content -->
+<div class="container-fluid mt--7">
+    <!-- Table -->
+    <div class="row">
+        <div class="col">
+            <div class="card shadow">
+                <div class="card-header border-0">
+                    <h3 class="mb-0">Direcciones</h3> 
+                    <button type="button" class="btn btn-success" (click)="create()">Crear</button>   
+                </div>
+               <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                          <th scope="col">Barrio</th>
+<th scope="col">Tipo_calle</th>
+<th scope="col">Calle</th>
+<th scope="col">Numero</th>
+<th scope="col">Piso</th>
+<th scope="col">Municipio_id</th>
+<th scope="col">Id</th>
+
+                          <th scope="col">Opciones</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let actual of direcciones">
+                            
+    <td>{{actual.barrio}}</td>
+  
+    <td>{{actual.tipo_calle}}</td>
+  
+    <td>{{actual.calle}}</td>
+  
+    <td>{{actual.numero}}</td>
+  
+    <td>{{actual.piso}}</td>
+  
+    <td>{{actual.municipio_id}}</td>
+  
+    <td>{{actual.id}}</td>
+  
+                            <td>
+                                <button type="button" class="btn btn-success" (click)="view(actual.id)">Visualizar</button>
+                                <button type="button" class="btn btn-warning" (click)="update(actual.id)">Editar</button>
+                                <button type="button" class="btn btn-danger" (click)="delete(actual.id)">Eliminar</button>
+                            </td>
+                        </tr>
+                      </tbody>
+                </table>
+               </div>
+            </div>
+        </div>
+    </div>
+</div>

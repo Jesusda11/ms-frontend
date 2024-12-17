@@ -32,5 +32,9 @@ export class CuotasService {
   update(cuotas: Cuota): Observable<Cuota> {
     return this.http.put<Cuota>(`${environment.url_ms_business}/cuotas/${cuotas.id}`, cuotas);
   }
+
+  listByContract(contrato_id: number): Observable<Cuota[]> {
+    return this.http.get<Cuota[]>(`${environment.url_ms_business}/cuotas?contrato_id=${contrato_id}}`);
+  }
 }
   

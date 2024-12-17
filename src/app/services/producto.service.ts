@@ -31,4 +31,12 @@ export class ProductoService {
   update(producto:Producto): Observable<Producto> {
     return this.http.put<Producto>(`${environment.url_ms_business}/productos/${producto.id}`,producto);
   }
+
+  listBylot(producto_id: number): Observable<Producto[]> {
+    return this.http.get<Producto[]>(`${environment.url_ms_business}/productos?lote_id=${producto_id}}`);
+  }
+
+  listByClient(cliente_id: number): Observable<Producto[]> {
+    return this.http.get<Producto[]>(`${environment.url_ms_business}/productos?cliente_id=${cliente_id}}`);
+  }
 }

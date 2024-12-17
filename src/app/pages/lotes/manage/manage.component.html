@@ -32,7 +32,7 @@
                                 [disabled]="mode === 1"
                                 class="form-control"
                                 [ngModel]="mode === 1 ?lote.tipo_de_carga : lote.tipoDeCarga"
-                                (ngModelChange)="mode === 1 ? lote.tipo_de_carga = $event : lote.tipoDeCarga = $event"
+                                (ngModelChange)="mode === 1 ?  lote.tipo_de_carga  = $event : lote.tipoDeCarga  = $event"
                             >
                         </div>
                     </div>
@@ -60,6 +60,14 @@
                         <div class="col-8">
                             <button *ngIf="mode==2" class="btn btn-success btn-block" (click)="create()">Crear</button>
                             <button *ngIf="mode==3" class="btn btn-success btn-block" (click)="update()">Actualizar</button>
+                        </div>
+                    </div>
+                    <br>
+                    <!-- Botón Productos -->
+                    <div class="row" *ngIf="mode === 1">
+                        <div class="col-4"></div>
+                        <div class="col-8">
+                            <button class="btn btn-primary btn-block" (click)="showProducts(lote.id)">Ver productos</button>
                         </div>
                     </div>
                 </div>

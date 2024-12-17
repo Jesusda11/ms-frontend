@@ -1,0 +1,52 @@
+
+<div class="header bg-gradient-danger pb-8 pt-5 pt-md-8">
+</div>
+<!-- Page content -->
+<div class="container-fluid mt--7">
+    <!-- Table -->
+    <div class="row">
+        <div class="col">
+            <div class="card shadow">
+                <div class="card-header border-0">
+                    <h3 class="mb-0">Servicios</h3> 
+                    <button type="button" class="btn btn-success" (click)="create()">Crear</button>   
+                </div>
+               <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                          <th scope="col">Nombre</th>
+<th scope="col">Direccion</th>
+<th scope="col">Descripcion</th>
+<th scope="col">Fecha</th>
+<th scope="col">Id</th>
+
+                          <th scope="col">Opciones</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let actual of servicios">
+                            
+    <td>{{actual.nombre}}</td>
+  
+    <td>{{actual.direccion}}</td>
+  
+    <td>{{actual.descripcion}}</td>
+  
+    <td>{{actual.fecha | date: 'yyyy-MM-dd' }}</td>
+  
+    <td>{{actual.id}}</td>
+  
+                            <td>
+                                <button type="button" class="btn btn-success" (click)="view(actual.id)">Visualizar</button>
+                                <button type="button" class="btn btn-warning" (click)="update(actual.id)">Editar</button>
+                                <button type="button" class="btn btn-danger" (click)="delete(actual.id)">Eliminar</button>
+                            </td>
+                        </tr>
+                      </tbody>
+                </table>
+               </div>
+            </div>
+        </div>
+    </div>
+</div>

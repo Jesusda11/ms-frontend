@@ -31,4 +31,9 @@ export class LoteService {
   update(lote:Lote): Observable<Lote> {
     return this.http.put<Lote>(`${environment.url_ms_business}/lotes/${lote.id}`,lote);
   }
+
+  listByRoute(ruta_id: number): Observable<Lote[]> {
+      return this.http.get<Lote[]>(`${environment.url_ms_business}/lotes?ruta_id=${ruta_id}}`);
+    }
+  
 }

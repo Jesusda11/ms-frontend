@@ -1,6 +1,6 @@
 
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Contrato } from 'src/app/models/contrato.model';
 import { ContratosService } from 'src/app/services/contratos.service';
 import Swal from 'sweetalert2';
@@ -10,14 +10,22 @@ import Swal from 'sweetalert2';
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.scss']
 })
-export class ListComponent implements OnInit {
+export class ListComponent implements OnInit {  
 
   contratos: Contrato[] = [];
+  cliente_id: number;
 
-  constructor(private contratosService: ContratosService, private router: Router) {}
+  constructor(private contratosService: ContratosService, private router: Router, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
-    this.list();
+    this.cliente_id = this.route.snapshot.params['id'];
+
+    const currentUrl = this.route.snapshot.url.join('/');
+    if (currentUrl.includes('filterByClient')) {
+      this.filterByClient();
+    } else {
+      this.list();
+    }  
   }
 
   list(): void {
@@ -60,5 +68,10 @@ export class ListComponent implements OnInit {
     this.router.navigate(["contratos/create"]);
   }
 
-  
+  filterByClient(): void {
+    this.contratosService.listByClient(this.cliente_id).subscribe(data => {
+      this.contratos = data;
+      console.log(this.contratos);
+    });
+  }
 }

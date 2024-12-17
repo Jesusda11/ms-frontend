@@ -85,4 +85,8 @@ export class ManageComponent implements OnInit {
     })
   }
 
+  showGastos(id:number){
+    this.router.navigate(["gastos/filterByDuenio", + id ])
+  }
+
 }
