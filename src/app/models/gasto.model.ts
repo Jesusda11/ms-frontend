@@ -3,6 +3,6 @@ export class Gasto {
   servicio_id: number;
   conductor_id: number;
   duenios_id: number;
-  factura_id: number;
+  factura_id?: number;
   id: number;
 }

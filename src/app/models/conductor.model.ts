@@ -3,4 +3,5 @@ export class Conductor {
     licencia_conduccion: string
     anios_experiencia: number
     usuario_id: string
+    usuario_name?: string
 }
