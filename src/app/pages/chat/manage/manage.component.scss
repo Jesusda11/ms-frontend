@@ -1,0 +1,29 @@
+.chat-messages {
+    height: 400px;
+    overflow-y: auto;
+    padding: 10px;
+  }
+  
+  .message {
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #f1f1f1;
+  }
+  
+  .active-user {
+    background-color: #d4edda;
+    text-align: right;
+  }
+  
+  .timestamp {
+    display: block;
+    font-size: 0.8em;
+    color: #6c757d;
+  }
+  
+  .chat-input {
+    padding: 10px;
+  }
+  
+  

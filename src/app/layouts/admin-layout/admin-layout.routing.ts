@@ -208,7 +208,7 @@ export const AdminLayoutRoutes: Routes = [
 
       {
         path: 'clientes',
-        canActivate:[AuthenticatedGuard],
+        //canActivate:[AuthenticatedGuard],
         children: [
           {
             path: '',
@@ -279,4 +279,13 @@ export const AdminLayoutRoutes: Routes = [
         ]
       },
       /* AUTO-ROUTES */
+      {
+        path: 'chat',
+        children: [
+          {
+            path: '',
+            loadChildren: () => import('src/app/pages/chat/chat.module').then(m => m.ChatModule)
+          }
+        ]
+      },
 ];

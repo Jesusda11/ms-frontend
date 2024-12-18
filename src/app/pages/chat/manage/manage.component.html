@@ -1,0 +1,39 @@
+<div class="header bg-gradient-danger pb-8 pt-5 pt-md-8">
+    <h2 class="text-white">Chat</h2>
+  </div>
+  
+  <div class="container-fluid mt--7">
+    <div class="row">
+      <div class="col">
+        <div class="card shadow">
+          <div class="card-header border-0">
+            <h3 class="mb-0">Mensajes</h3>
+          </div>
+          <div class="card-body">
+            <div class="chat-messages">
+              <div *ngFor="let message of messages" 
+                   [ngClass]="{'message': true, 'active-user': isActiveUser(message.sender)}">
+                <strong>{{ message.sender }}:</strong> {{ message.text }}
+                <small class="timestamp">{{ message.timestamp | date:'short' }}</small>
+              </div>
+            </div>
+            <div class="chat-input mt-3">
+              <div class="row">
+                <div class="col-10">
+                  <input type="text" class="form-control" 
+                         [(ngModel)]="newMessage" 
+                         (keyup.enter)="sendMessage()"
+                         placeholder="Escribe un mensaje...">
+                </div>
+                <div class="col-2">
+                  <button class="btn btn-primary btn-block" (click)="sendMessage()">Enviar</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  
