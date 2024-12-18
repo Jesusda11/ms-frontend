@@ -19,7 +19,25 @@ export const ROUTES: RouteInfo[] = [
     { path: '/tables', title: 'Tables',  icon:'ni-bullet-list-67 text-red', class: '', type:1  },
     { path: '/login', title: 'Login',  icon:'ni-key-25 text-info', class: '', type:0},
     { path: '/register', title: 'Register',  icon:'ni-circle-08 text-pink', class: '',type:0 },
-    {path: '/productos/list', title: 'Productos',  icon:'ni-circle-08 text-pink', class: '',type:1}
+    {path: '/productos/list', title: 'Productos', icon: 'ni-box-2 text-blue', class: '', type: 1}, // Caja para representar productos
+{path: '/administradores/list', title: 'Administradores', icon: 'ni-single-02 text-purple', class: '', type: 1}, // Icono de persona administrativa
+{path: '/clientes/list', title: 'Clientes', icon: 'ni-circle-08 text-green', class: '', type: 1}, // Icono de usuarios/clientes
+{path: '/conductores/list', title: 'Conductores', icon: 'ni-delivery-fast text-orange', class: '', type: 1}, // Icono de transporte/vehículo
+{path: '/contratos/list', title: 'Contratos', icon: 'ni-paper-diploma text-red', class: '', type: 1}, // Icono de documento o contrato
+{path: '/cuotas/list', title: 'Cuotas', icon: 'ni-money-coins text-yellow', class: '', type: 1}, // Icono de dinero o pagos
+{path: '/direcciones/list', title: 'Direcciones', icon: 'ni-compass-04 text-cyan', class: '', type: 1}, // Icono de brújula para ubicaciones
+{path: '/direccionrutas/list', title: 'Direccion x Ruta', icon: 'ni-compass-04 text-pink', class: '', type: 1}, // Icono de mapa para rutas
+{path: '/duenios/list', title: 'Dueños', icon: 'ni-single-02 text-teal', class: '', type: 1}, // Icono de propietarios o empresa
+{path: '/dueniovehiculos/list', title: 'Dueños x Vehiculos', icon: 'ni-bus-front-12 text-brown', class: '', type: 1}, // Vehículo y dueños relacionados
+{path: '/facturas/list', title: 'Facturas', icon: 'ni-credit-card text-green', class: '', type: 1}, // Icono de tarjeta o factura
+{path: '/gastos/list', title: 'Gastos', icon: 'ni-chart-bar-32 text-red', class: '', type: 1}, // Icono de gráficos para gastos
+{path: '/lotes/list', title: 'Lotes', icon: 'ni-archive-2 text-indigo', class: '', type: 1}, // Icono de almacenamiento
+{path: '/personanaturales/list', title: 'Personas naturales', icon: 'ni-single-02 text-blue', class: '', type: 1}, // Persona individual
+{path: '/rutas/list', title: 'Rutas', icon: 'ni-pin-3 text-orange', class: '', type: 1}, // Icono de un pin en el mapa
+{path: '/servicios/list', title: 'Servicios', icon: 'ni-settings-gear-65 text-violet', class: '', type: 1}, // Icono de engranaje para servicios
+{path: '/vehiculos/list', title: 'Vehiculos', icon: 'ni-bus-front-12 text-yellow', class: '', type: 1}, // Icono de transporte
+{path: '/vehiculoconductores/list', title: 'Vehiculo x Conductores', icon: 'ni-delivery-fast text-pink', class: '', type: 1} // Icono de transporte asignado
+
 ];
 
 @Component({
