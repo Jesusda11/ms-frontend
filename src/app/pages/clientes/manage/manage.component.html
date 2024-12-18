@@ -1,127 +1,180 @@
-<div>
+<div class="header bg-gradient-danger pb-8 pt-5 pt-md-8">
+</div>
+
+<!-- Page content -->
+<div class="container-fluid mt--7">
   <form [formGroup]="theFormGroup" (ngSubmit)="submitForm()">
-    <div class="card shadow">
-      <!-- Card Header -->
-      <div class="card-header">
-        <h3 *ngIf="mode === 1">Visualizar</h3>
-        <h3 *ngIf="mode === 2">Crear</h3>
-        <h3 *ngIf="mode === 3">Actualizar</h3>
-      </div>
-
-      <!-- Card Body -->
-      <div class="card-body">
-        <!-- ID Field (Disabled unless Creating mode) -->
-        <div *ngIf="mode !== 2" class="form-group">
-          <label>Id:</label>
-          <input
-            type="text"
-            class="form-control"
-            disabled
-            formControlName="id"
-            [ngClass]="{'inputInvalido': trySend && theFormGroup.get('id')?.errors}"
-          />
-        </div>
-
-        <br />
-
-        <!-- Preferencias Field -->
-        <div class="form-group">
-          <label>Preferencias:</label>
-          <input
-            type="text"
-            class="form-control"
-            formControlName="preferencias"
-            [ngClass]="{'inputInvalido': trySend && theFormGroup.get('preferencias')?.errors}"
-          />
-        </div>
-
-        <!-- Persona Natural Toggle -->
-        <div *ngIf="mode === 2" class="mt-3">
-          <label>¿Agregar Persona Natural?</label>
-          <button
-            class="btn btn-primary"
-            type="button"
-            (click)="togglePersonaNatural()"
-          >
-            {{ showPersonaNaturalForm ? 'Ocultar' : 'Agregar' }}
-          </button>
-        </div>
-
-        <!-- Persona Natural Form -->
-        <div *ngIf="showPersonaNaturalForm" class="mt-4">
-          <h5>Datos de Persona Natural</h5>
-
-          <!-- Nacionalidad -->
-          <div class="form-group">
-            <label>Nacionalidad:</label>
-            <input
-              type="text"
-              class="form-control"
-              formControlName="nacionalidad"
-              [ngClass]="{'inputInvalido': trySend && theFormGroup.get('nacionalidad')?.errors}"
-            />
+    <div class="row">
+      <div class="col">
+        <div class="card shadow">
+          <div class="card-header border-0">
+            <h3 *ngIf="mode === 1" class="mb-0">Visualizar</h3>
+            <h3 *ngIf="mode === 2" class="mb-0">Crear</h3>
+            <h3 *ngIf="mode === 3" class="mb-0">Actualizar</h3>
           </div>
+          <div class="card-body">
+            <!-- Campo Id: Visible solo cuando no estás creando -->
+            <div *ngIf="mode !== 2" class="row">
+              <div class="col-4">
+                <label>Id:</label>
+              </div>
+              <div class="col-8">
+                <input
+                  type="text"
+                  class="form-control"
+                  disabled
+                  formControlName="id"
+                  [ngClass]="{'inputInvalido': trySend && theFormGroup.get('id')?.errors}"
+                />
+              </div>
+            </div>
+            <br />
 
-          <!-- Género -->
-          <div class="form-group">
-            <label>Género:</label>
-            <input
-              type="text"
-              class="form-control"
-              formControlName="genero"
-              [ngClass]="{'inputInvalido': trySend && theFormGroup.get('genero')?.errors}"
-            />
-          </div>
+            <!-- Campo Preferencias -->
+            <div class="row">
+              <div class="col-4">
+                <label>Preferencias:</label>
+              </div>
+              <div class="col-8">
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="preferencias"
+                  [ngClass]="{'inputInvalido': trySend && theFormGroup.get('preferencias')?.errors}"
+                />
+              </div>
+            </div>
+            <br />
 
-          <!-- Usuario ID -->
-          <div class="form-group">
-            <label>Usuario ID:</label>
-            <div class="col-8">
-              <select
-                class="form-control"
-                [disabled]="mode === 1"
-                formControlName="usuario_id"
-                [ngClass]="{'inputInvalido': trySend && theFormGroup.get('usuario_id')?.errors}"
+            <!-- Sección Agregar Persona Natural (solo en modo Crear) -->
+            <div *ngIf="mode === 2" class="d-flex" style="gap:1rem">
+              <label>¿Agregar Persona Natural?</label>
+              <button
+                class="btn btn-primary"
+                type="button"
+                (click)="togglePersonaNatural()"
               >
-                <option
-                  [value]="usuario._id"
-                  *ngFor="let usuario of usuarios"
+                {{ showPersonaNaturalForm ? 'Ocultar' : 'Agregar' }}
+              </button>
+            </div>
+
+            <!-- Formulario Persona Natural -->
+            <div *ngIf="showPersonaNaturalForm">
+              <h5>Datos de Persona Natural</h5>
+
+              <!-- Campo Nacionalidad -->
+              <div class="row">
+                <div class="col-4">
+                  <label>Nacionalidad:</label>
+                </div>
+                <div class="col-8">
+                  <select
+                    class="form-control"
+                    formControlName="nacionalidad"
+                    [ngClass]="{'inputInvalido': trySend && theFormGroup.get('nacionalidad')?.errors}"
+                  >
+                    <option value="colombiano">Colombiano</option>
+                    <option value="venezolano">Venezolano</option>
+                    <option value="argentino">Argentino</option>
+                    <option value="chileno">Chileno</option>
+                    <option value="peruano">Peruano</option>
+                    <option value="mexicano">Mexicano</option>
+                    <option value="ecuatoriano">Ecuatoriano</option>
+                    <option value="brasilero">Brasileño</option>
+                    <!-- Agrega otras nacionalidades según sea necesario -->
+                  </select>
+                </div>
+              </div>
+
+              <br />
+
+              <!-- Campo Género -->
+              <div class="row">
+                <div class="col-4">
+                  <label>Género:</label>
+                </div>
+                <div class="col-8">
+                  <select
+                    class="form-control"
+                    formControlName="genero"
+                    [ngClass]="{'inputInvalido': trySend && theFormGroup.get('genero')?.errors}"
+                  >
+                    <option value="masculino">Masculino</option>
+                    <option value="femenino">Femenino</option>
+                    <option value="no_binario">No Binario</option>
+                    <option value="otro">Otro</option>
+                    <!-- Agrega otras opciones de género según sea necesario -->
+                  </select>
+                </div>
+              </div>
+
+              <br />
+
+              <!-- Campo Usuario ID -->
+              <div class="row">
+                <div class="col-4">
+                  <label>Usuario ID:</label>
+                </div>
+                <div class="col-8">
+                  <select
+                    class="form-control"
+                    [disabled]="mode === 1"
+                    formControlName="usuario_id"
+                    [ngClass]="{'inputInvalido': trySend && theFormGroup.get('usuario_id')?.errors}"
+                  >
+                    <option [value]="usuario._id" *ngFor="let usuario of usuarios">
+                      {{ usuario._id }}. {{ usuario.name }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Botones adicionales en modo Visualizar -->
+              <div class="row" *ngIf="mode === 1">
+                <div class="col-4"></div>
+                <div class="col-8">
+                  <button
+                    class="btn btn-primary btn-block"
+                    type="button"
+                    (click)="showProductos(cliente.id)"
+                  >
+                    Ver productos
+                  </button>
+                  <button
+                    class="btn btn-primary btn-block"
+                    type="button"
+                    (click)="showContracts(cliente.id)"
+                  >
+                    Ver Contratos
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <br />
+
+            <!-- Botones Crear y Actualizar -->
+            <div class="row">
+              <div class="col-4"></div>
+              <div class="col-8">
+                <button
+                  *ngIf="mode === 2"
+                  class="btn btn-success btn-block"
+                  type="submit"
                 >
-                  {{ usuario._id }}. {{ usuario.name }}
-                </option>
-              </select>
+                  Crear
+                </button>
+                <button
+                  *ngIf="mode === 3"
+                  class="btn btn-success btn-block"
+                  type="submit"
+                >
+                  Actualizar
+                </button>
+              </div>
             </div>
           </div>
         </div>
-
-        <!-- Action Buttons -->
-        <div class="mt-4">
-          <button *ngIf="mode === 2" class="btn btn-success" type="submit">
-            Crear
-          </button>
-          <button *ngIf="mode === 3" class="btn btn-success" type="submit">
-            Actualizar
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Extra Actions for Visualize Mode -->
-    <div class="row mt-3" *ngIf="mode === 1">
-      <div class="col-4"></div>
-      <div class="col-8">
-        <button
-          class="btn btn-primary btn-block"
-          (click)="showProductos(cliente.id)"
-        >
-          Ver productos
-        </button>
-        <button
-          class="btn btn-primary btn-block"
-          (click)="showContracts(cliente.id)"
-        >
-          Ver Contratos
-        </button>
       </div>
     </div>
   </form>

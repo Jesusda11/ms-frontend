@@ -20,6 +20,8 @@ export class ManageComponent implements OnInit {
   mode: number; // 1=view, 2=create, 3=update
   theFormGroup: FormGroup;
   trySend: boolean;
+  minFechaFin: string;  // Para el mínimo de fecha_fin
+  maxFechaInicio: string; 
   clientes: Personanatural[] = []
 
   constructor(
@@ -32,6 +34,8 @@ export class ManageComponent implements OnInit {
   ) {
     this.contrato = { id: 0, cliente_id: 0, valor: 0, fecha_inicio: '', fecha_fin: '' };
     this.mode = 0;
+    this.minFechaFin = '';  // Inicializamos minFechaFin
+    this.maxFechaInicio = '';  
     this.trySend = false;
     this.configFormGroup();
   }
@@ -61,6 +65,25 @@ export class ManageComponent implements OnInit {
       });
     });
 
+  }
+
+  onFechaInicioChange() {
+    const fechaInicio = this.theFormGroup.get('fecha_inicio')?.value;
+    if (fechaInicio) {
+      const fecha = new Date(fechaInicio);
+      fecha.setDate(fecha.getDate() + 1); // Establece fecha_fin como el día siguiente de fecha_inicio
+      this.minFechaFin = fecha.toISOString().split('T')[0]; // Convierte la fecha a formato 'yyyy-MM-dd'
+    }
+  }
+
+  // Método para actualizar el valor máximo de fecha_inicio cuando cambia fecha_fin
+  onFechaFinChange() {
+    const fechaFin = this.theFormGroup.get('fecha_fin')?.value;
+    if (fechaFin) {
+      const fecha = new Date(fechaFin);
+      fecha.setDate(fecha.getDate() - 1); // Establece fecha_inicio como el día anterior a fecha_fin
+      this.maxFechaInicio = fecha.toISOString().split('T')[0]; // Convierte la fecha a formato 'yyyy-MM-dd'
+    }
   }
 
   configFormGroup() {

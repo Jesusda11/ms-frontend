@@ -58,7 +58,7 @@ export class ManageComponent implements OnInit {
       id: [{ value: '', disabled: true }],
       tipo_carga: ['', [Validators.required, Validators.minLength(3)]],
       peso: [0, [Validators.required, Validators.min(1)]],
-      ruta_id: [0, [Validators.required]]
+      ruta_id: [null, [Validators.required]]
     });
   }
 

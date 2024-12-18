@@ -68,8 +68,8 @@ export class ManageComponent implements OnInit {
       id: [{ value: '', disabled: true }],
       nacionalidad: ['', [Validators.required, Validators.minLength(3)]],
       genero: ['', [Validators.required]],
-      cliente_id: [0, [Validators.required, Validators.min(1)]],
-      usuario_id: ['', [Validators.required, Validators.minLength(5)]]
+      cliente_id: [null, [Validators.required, Validators.min(1)]],
+      usuario_id: [null, [Validators.required, Validators.minLength(5)]]
     });
   }
 

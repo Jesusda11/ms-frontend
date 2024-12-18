@@ -1,7 +1,9 @@
-<div class="header bg-gradient-danger pb-8 pt-5 pt-md-8"></div>
+<div class="header bg-gradient-danger pb-8 pt-5 pt-md-8">
+</div>
 
 <!-- Page content -->
 <div class="container-fluid mt--7">
+  <!-- Table -->
   <form [formGroup]="theFormGroup" (ngSubmit)="submitForm()">
     <div class="row">
       <div class="col">
@@ -15,8 +17,8 @@
 
           <!-- Card Body -->
           <div class="card-body">
-            <!-- ID Field (Disabled unless Creating mode) -->
-            <div *ngIf="mode != 2" class="row mb-3">
+            <!-- Campo ID (solo si mode != 2) -->
+            <div *ngIf="mode != 2" class="row">
               <div class="col-4">
                 <label>Id:</label>
               </div>
@@ -30,11 +32,12 @@
                 />
               </div>
             </div>
+            <br />
 
-            <!-- Cliente_id Field -->
-            <div class="row mb-3">
+            <!-- Campo Cliente_id -->
+            <div class="row">
               <div class="col-4">
-                <label>Cliente ID:</label>
+                <label>Cliente_id:</label>
               </div>
               <div class="col-8">
                 <select
@@ -52,9 +55,10 @@
                 </select>
               </div>
             </div>
+            <br />
 
-            <!-- Valor Field -->
-            <div class="row mb-3">
+            <!-- Campo Valor -->
+            <div class="row">
               <div class="col-4">
                 <label>Valor:</label>
               </div>
@@ -68,11 +72,12 @@
                 />
               </div>
             </div>
+            <br />
 
-            <!-- Fecha Inicio Field -->
-            <div class="row mb-3">
+            <!-- Campo Fecha_inicio -->
+            <div class="row">
               <div class="col-4">
-                <label>Fecha Inicio:</label>
+                <label>Fecha_inicio:</label>
               </div>
               <div class="col-8">
                 <input
@@ -80,15 +85,18 @@
                   class="form-control"
                   [disabled]="mode === 1"
                   formControlName="fecha_inicio"
+                  (change)="onFechaInicioChange()"
+                  [max]="maxFechaInicio"
                   [ngClass]="{'inputInvalido': trySend && theFormGroup.get('fecha_inicio')?.errors}"
                 />
               </div>
             </div>
+            <br />
 
-            <!-- Fecha Fin Field -->
-            <div class="row mb-3">
+            <!-- Campo Fecha_fin -->
+            <div class="row">
               <div class="col-4">
-                <label>Fecha Fin:</label>
+                <label>Fecha_fin:</label>
               </div>
               <div class="col-8">
                 <input
@@ -96,13 +104,16 @@
                   class="form-control"
                   [disabled]="mode === 1"
                   formControlName="fecha_fin"
+                  (change)="onFechaFinChange()"
+                  [min]="minFechaFin"
                   [ngClass]="{'inputInvalido': trySend && theFormGroup.get('fecha_fin')?.errors}"
                 />
               </div>
             </div>
+            <br />
 
-            <!-- Buttons -->
-            <div class="row mt-4">
+            <!-- Botones Crear / Actualizar -->
+            <div class="row">
               <div class="col-4"></div>
               <div class="col-8">
                 <button
@@ -122,22 +133,22 @@
               </div>
             </div>
 
-            <!-- Extra Actions for Visualize Mode -->
-            <div class="row mt-3" *ngIf="mode === 1">
+            <!-- Botón Ver cuotas (modo Visualizar) -->
+            <div class="row" *ngIf="mode === 1">
               <div class="col-4"></div>
               <div class="col-8">
                 <button
                   class="btn btn-primary btn-block"
+                  type="button"
                   (click)="showCuotas(contrato.id)"
                 >
                   Ver cuotas
                 </button>
               </div>
             </div>
-          </div>
-          <!-- End Card Body -->
-        </div>
-      </div>
-    </div>
+          </div> <!-- Fin de Card Body -->
+        </div> <!-- Fin de Card -->
+      </div> <!-- Fin de Col -->
+    </div> <!-- Fin de Row -->
   </form>
-</div>
+</div> <!-- Fin de Container-fluid -->

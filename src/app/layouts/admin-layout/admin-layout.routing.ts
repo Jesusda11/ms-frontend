@@ -21,26 +21,6 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'map/:id', component: MapsComponent },
 
 
-    {
-        path: 'theaters',
-        children: [
-          {
-            path: '',
-            loadChildren: () => import('src/app/pages/theaters/theaters.module').then(m => m.TheatersModule)
-          }
-        ]
-      },
-
-      {
-        path: 'seats',
-        children: [
-          {
-            path: '',
-            loadChildren: () => import('src/app/pages/seats/seats.module').then(m => m.SeatsModule)
-          }
-        ]
-      },
-
       {
         path: 'categorias',
         canActivate:[AuthenticatedGuard],

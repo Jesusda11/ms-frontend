@@ -53,7 +53,7 @@ export class ManageComponent implements OnInit {
       calle: ['', [Validators.required, Validators.minLength(3)]],
       numero: ['', [Validators.required, Validators.pattern('^[0-9]*$')]], // Ensure it's a number
       piso: ['', [Validators.required, Validators.minLength(1)]],
-      municipio_id: ['', [Validators.required]]
+      municipio_id: [1, [Validators.required]]
     });
   }
 

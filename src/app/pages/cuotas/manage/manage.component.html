@@ -20,7 +20,7 @@
                             <label>Id:</label>
                         </div>
                         <div class="col-8">
-                            <input type="text" class="form-control" disabled [(ngModel)]="cuota.id">
+                            <input type="text" class="form-control" disabled  formControlName="id" >
                         </div>
                     </div>
                     <br>
@@ -31,7 +31,7 @@
             </div>
             <div class="col-8">
             <select class="form-control" [disabled]="mode === 1" formControlName="contrato_id" [ngClass]="{'inputInvalido': trySend && theFormGroup.get('contrato_id')?.errors}">
-                <option [value]="contrato.id"  *ngFor="let contrato of contratos" >{{contrato.id}}</option>
+                <option [value]="contrato.id"  *ngFor="let contrato of contratos" >{{contrato.id}}. {{contrato.valor}}$  {{contrato.fecha_inicio | date: 'yyyy-MM-dd'}} -> {{contrato.fecha_fin | date: 'yyyy-MM-dd'}}</option>
             </select>
             </div>
         </div> 
@@ -43,7 +43,8 @@
             </div>
             <div class="col-8">
             <select class="form-control" [disabled]="mode === 1" formControlName="factura_id" [ngClass]="{'inputInvalido': trySend && theFormGroup.get('factura_id')?.errors}">
-                <option [value]="factura.id"  *ngFor="let factura of facturas" >{{factura.id}}</option>
+                <option [value]="null">Ninguna factura</option>  <!-- Opción para valor nulo -->
+                <option [value]="factura.id"  *ngFor="let factura of facturas">{{factura.id}}</option>
             </select>
             </div>
         </div> 
@@ -87,6 +88,7 @@
                 <input type="date" class="form-control" [disabled]="mode === 1" formControlName="fecha_vencimiento" [ngClass]="{'inputInvalido': trySend && theFormGroup.get('fecha_vencimiento')?.errors}">
             </div>
         </div> 
+
         <br/>
         
                     <div class="row">

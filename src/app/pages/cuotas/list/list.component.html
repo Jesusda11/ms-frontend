@@ -16,8 +16,6 @@
                     <thead>
                         <tr>
                           <th scope="col">Id</th>
-<th scope="col">Contrato_id</th>
-<th scope="col">Factura_id</th>
 <th scope="col">Monto</th>
 <th scope="col">Tasa_interes</th>
 <th scope="col">Fecha_generacion</th>
@@ -31,10 +29,6 @@
                             
     <td>{{actual.id}}</td>
   
-    <td>{{actual.contrato_id}}</td>
-  
-    <td>{{actual.factura_id}}</td>
-  
     <td>{{actual.monto}}</td>
   
     <td>{{actual.tasa_interes}}</td>
@@ -44,9 +38,10 @@
     <td>{{actual.fecha_vencimiento | date: 'yyyy-MM-dd' }}</td>
   
                             <td>
-                                <button type="button" class="btn btn-success" (click)="view(actual.id)">Visualizar</button>
-                                <button type="button" class="btn btn-warning" (click)="update(actual.id)">Editar</button>
-                                <button type="button" class="btn btn-danger" (click)="delete(actual.id)">Eliminar</button>
+                                <button type="button" class="btn btn-success" (click)="view(actual.id)">👀</button>
+                                <button type="button" class="btn btn-warning" (click)="update(actual.id)">📋</button>
+                                <button type="button" class="btn btn-danger" (click)="delete(actual.id)">🗑️</button>
+                                <button type="button" class="btn btn-success" (click)="pagar(actual.id)">Pagar</button>
                             </td>
                         </tr>
                       </tbody>

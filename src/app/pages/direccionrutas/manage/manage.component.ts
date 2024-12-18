@@ -82,13 +82,13 @@ export class ManageComponent implements OnInit {
   configFormGroup() {
     this.theFormGroup = this.theFormBuilder.group({
       id: [{ value: '', disabled: true }],
-      direccion_id: [this.direccionruta.direccion_id, [Validators.required]],
-      ruta_id: [this.direccionruta.ruta_id, [Validators.required]],
-      lote_id: [this.direccionruta.lote_id, [Validators.required]],
-      fecha_entrega: [this.direccionruta.fecha_entrega, [Validators.required]],
-      distancia: [this.direccionruta.distancia, [Validators.required, Validators.min(0)]],
-      estado: [this.direccionruta.estado, [Validators.required]],
-      orden_de_paso: [this.direccionruta.orden_de_paso, [Validators.required, Validators.min(1)]]
+      direccion_id: [null, [Validators.required]],
+      ruta_id: [null, [Validators.required]],
+      lote_id: [null, [Validators.required]],
+      fecha_entrega: ["", [Validators.required]],
+      distancia: [0, [Validators.required, Validators.min(1)]],
+      estado: ["", [Validators.required]],
+      orden_de_paso: [0, [Validators.required, Validators.min(1)]]
     });
   }
 

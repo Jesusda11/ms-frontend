@@ -23,7 +23,7 @@ export class SecurityInterceptor implements HttpInterceptor {
     if (request.url.includes('/login') || request.url.includes('/token-validation')) {
       console.log("no se pone token")
       return next.handle(request);
-
+      
     } else {
       let theUser = this.securityService.activeUserSession
       const token = theUser["token"];
