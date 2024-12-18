@@ -82,10 +82,10 @@
         
         <div class="row">
             <div class="col-4">
-                <label>Municipio_id:</label>
+                <label>Municipio id:</label>
             </div>
             <div class="col-8">
-                <input type="number" value="1" class="form-control" [disabled]="mode === 1" formControlName="municipio_id" [ngClass]="{'inputInvalido': trySend && theFormGroup.get('municipio_id')?.errors}">
+                <input type="number" value="1" class="form-control" disabled formControlName="municipio_id" [ngClass]="{'inputInvalido': trySend && theFormGroup.get('municipio_id')?.errors}">
             </div>
         </div> 
         <br/>

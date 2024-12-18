@@ -1,87 +1,154 @@
-
 <div class="header bg-gradient-danger pb-8 pt-5 pt-md-8">
-
 </div>
+
 <!-- Page content -->
 <div class="container-fluid mt--7">
-    <!-- Table -->
-    <form [formGroup]="theFormGroup" (ngSubmit)="submitForm()">
+  <!-- Table -->
+  <form [formGroup]="theFormGroup" (ngSubmit)="submitForm()">
     <div class="row">
-        <div class="col">
-            <div class="card shadow">
-                <div class="card-header border-0">
-                    <h3 *ngIf="mode==1" class="mb-0">Visualizar</h3>
-                    <h3 *ngIf="mode==2" class="mb-0">Crear</h3>
-                    <h3 *ngIf="mode==3" class="mb-0">Actualizar</h3>
-                </div>
-                <div class="card-body">
-                    <div *ngIf="mode!=2" class="row">
-                        <div class="col-4">
-                            <label>Id:</label>
-                        </div>
-                        <div class="col-8">
-                            <input type="text" class="form-control" disabled formControlName="id" [ngClass]="{'inputInvalido': trySend && theFormGroup.get('id')?.errors}" >
-                        </div>
-                    </div>
-                    <br>
-                    
-        <div class="row">
-            <div class="col-4">
+      <div class="col">
+        <div class="card shadow">
+          <!-- Card Header -->
+          <div class="card-header border-0">
+            <h3 *ngIf="mode == 1" class="mb-0">Visualizar</h3>
+            <h3 *ngIf="mode == 2" class="mb-0">Crear</h3>
+            <h3 *ngIf="mode == 3" class="mb-0">Actualizar</h3>
+          </div>
+
+          <!-- Card Body -->
+          <div class="card-body">
+            <!-- Campo ID (solo si mode != 2) -->
+            <div *ngIf="mode != 2" class="row">
+              <div class="col-4">
+                <label>Id:</label>
+              </div>
+              <div class="col-8">
+                <input
+                  type="text"
+                  class="form-control"
+                  disabled
+                  formControlName="id"
+                  [ngClass]="{'inputInvalido': trySend && theFormGroup.get('id')?.errors}"
+                />
+              </div>
+            </div>
+            <br />
+
+            <!-- Campo Cliente_id -->
+            <div class="row">
+              <div class="col-4">
                 <label>Cliente_id:</label>
-            </div>
-            <div class="col-8">
-                <select class="form-control" [disabled]="mode === 1" formControlName="cliente_id" [ngClass]="{'inputInvalido': trySend && theFormGroup.get('cliente_id')?.errors}">
-                    <option [value]="cliente.cliente_id"  *ngFor="let cliente of clientes" >{{cliente.cliente_id}}. {{cliente.usuario_name}}</option>
+              </div>
+              <div class="col-8">
+                <select
+                  class="form-control"
+                  [disabled]="mode === 1"
+                  formControlName="cliente_id"
+                  [ngClass]="{'inputInvalido': trySend && theFormGroup.get('cliente_id')?.errors}"
+                >
+                  <option
+                    [value]="cliente.cliente_id"
+                    *ngFor="let cliente of clientes"
+                  >
+                    {{ cliente.cliente_id }}. {{ cliente.usuario_name }}
+                  </option>
                 </select>
+              </div>
             </div>
-        </div> 
-        <br/>
-        
-        <div class="row">
-            <div class="col-4">
+            <br />
+
+            <!-- Campo Valor -->
+            <div class="row">
+              <div class="col-4">
                 <label>Valor:</label>
+              </div>
+              <div class="col-8">
+                <input
+                  type="number"
+                  class="form-control"
+                  [disabled]="mode === 1"
+                  formControlName="valor"
+                  [ngClass]="{'inputInvalido': trySend && theFormGroup.get('valor')?.errors}"
+                />
+              </div>
             </div>
-            <div class="col-8">
-                <input type="number" class="form-control" [disabled]="mode === 1" formControlName="valor" [ngClass]="{'inputInvalido': trySend && theFormGroup.get('valor')?.errors}">
-            </div>
-        </div> 
-        <br/>
-        
-        <div class="row">
-            <div class="col-4">
+            <br />
+
+            <!-- Campo Fecha_inicio -->
+            <div class="row">
+              <div class="col-4">
                 <label>Fecha_inicio:</label>
+              </div>
+              <div class="col-8">
+                <input
+                  type="date"
+                  class="form-control"
+                  [disabled]="mode === 1"
+                  formControlName="fecha_inicio"
+                  (change)="onFechaInicioChange()"
+                  [max]="maxFechaInicio"
+                  [ngClass]="{'inputInvalido': trySend && theFormGroup.get('fecha_inicio')?.errors}"
+                />
+              </div>
             </div>
-            <div class="col-8">
-                <input type="date" class="form-control" [disabled]="mode === 1" formControlName="fecha_inicio" [ngClass]="{'inputInvalido': trySend && theFormGroup.get('fecha_inicio')?.errors}">
-            </div>
-        </div> 
-        <br/>
-        
-        <div class="row">
-            <div class="col-4">
+            <br />
+
+            <!-- Campo Fecha_fin -->
+            <div class="row">
+              <div class="col-4">
                 <label>Fecha_fin:</label>
+              </div>
+              <div class="col-8">
+                <input
+                  type="date"
+                  class="form-control"
+                  [disabled]="mode === 1"
+                  formControlName="fecha_fin"
+                  (change)="onFechaFinChange()"
+                  [min]="minFechaFin"
+                  [ngClass]="{'inputInvalido': trySend && theFormGroup.get('fecha_fin')?.errors}"
+                />
+              </div>
             </div>
-            <div class="col-8">
-                <input type="date" class="form-control" [disabled]="mode === 1"  formControlName="fecha_fin" [ngClass]="{'inputInvalido': trySend && theFormGroup.get('fecha_fin')?.errors}">
+            <br />
+
+            <!-- Botones Crear / Actualizar -->
+            <div class="row">
+              <div class="col-4"></div>
+              <div class="col-8">
+                <button
+                  *ngIf="mode == 2"
+                  class="btn btn-success btn-block"
+                  type="submit"
+                >
+                  Crear
+                </button>
+                <button
+                  *ngIf="mode == 3"
+                  class="btn btn-success btn-block"
+                  type="submit"
+                >
+                  Actualizar
+                </button>
+              </div>
             </div>
-        </div> 
-        <br/>
-        
-                    <div class="row">
-                      <div class="col-4"></div>
-                      <div class="col-8">
-                          <button *ngIf="mode==2" class="btn btn-success btn-block" type="submit">Crear</button>
-                          <button *ngIf="mode==3" class="btn btn-success btn-block" type="submit">Actualizar</button>
-                      </div>
-                  </div>
-                  <div class="row" *ngIf="mode === 1">
-                    <div class="col-4"></div>
-                    <div class="col-8">
-                        <button class="btn btn-primary btn-block" (click)="showCuotas(contrato.id)">Ver cuotas</button>
-                    </div>
-                </div>
+
+            <!-- Botón Ver cuotas (modo Visualizar) -->
+            <div class="row" *ngIf="mode === 1">
+              <div class="col-4"></div>
+              <div class="col-8">
+                <button
+                  class="btn btn-primary btn-block"
+                  type="button"
+                  (click)="showCuotas(contrato.id)"
+                >
+                  Ver cuotas
+                </button>
+              </div>
             </div>
-        </div>
-    </div>
-    </form>
-</div>
+          </div> <!-- Fin de Card Body -->
+        </div> <!-- Fin de Card -->
+      </div> <!-- Fin de Col -->
+    </div> <!-- Fin de Row -->
+  </form>
+</div> <!-- Fin de Container-fluid -->

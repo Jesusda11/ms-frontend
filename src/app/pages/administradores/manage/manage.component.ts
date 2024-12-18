@@ -80,6 +80,8 @@ export class ManageComponent implements OnInit {
     if (!this.validateForm()) return;
 
     const formData = this.theFormGroup.getRawValue();
+    console.log(formData);
+    
 
     if (this.mode === 2) {
       this.administradoresService.create(formData).subscribe(() => {

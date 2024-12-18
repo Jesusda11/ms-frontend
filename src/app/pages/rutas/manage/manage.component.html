@@ -31,7 +31,7 @@
             </div>
             <div class="col-8">
                 <select class="form-control" [disabled]="mode === 1" formControlName="contrato_id" [ngClass]="{'inputInvalido': trySend && theFormGroup.get('contrato_id')?.errors}">
-                    <option [value]="contrato.id"  *ngFor="let contrato of contratos" >{{contrato.id}}</option>
+                    <option [value]="contrato.id"  *ngFor="let contrato of contratos" >{{contrato.id}}. {{contrato.valor}}$ {{contrato.fecha_inicio | date: 'yyyy-MM-dd' }} -> {{contrato.fecha_fin | date: 'yyyy-MM-dd'}}</option>
                 </select>
             </div>
         </div> 

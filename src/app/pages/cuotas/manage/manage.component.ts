@@ -65,8 +65,8 @@ export class ManageComponent implements OnInit {
   configFormGroup() {
     this.theFormGroup = this.theFormBuilder.group({
       id: [{ value: '', disabled: true }],
-      contrato_id: ['', [Validators.required]],
-      factura_id: ['', [Validators.required]],
+      contrato_id: [null, [Validators.required]],
+      factura_id: [null],
       monto: [0, [Validators.required, Validators.min(1)]],
       tasa_interes: [0, [Validators.required, Validators.min(0), Validators.max(100)]],
       fecha_generacion: ['', [Validators.required]],

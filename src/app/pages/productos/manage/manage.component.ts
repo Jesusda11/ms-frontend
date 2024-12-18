@@ -77,8 +77,8 @@ export class ManageComponent implements OnInit {
       nombre: ['', [Validators.required, Validators.minLength(3)]],
       cantidad: [0, [Validators.required, Validators.min(1)]],
       peso: [0, [Validators.required, Validators.min(1)]],
-      lote_id: [0, [Validators.required]],
-      cliente_id: [0, [Validators.required]]
+      lote_id: [null, [Validators.required]],
+      cliente_id: [null, [Validators.required]]
     });
   }
 

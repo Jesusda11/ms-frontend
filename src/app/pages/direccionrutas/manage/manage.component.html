@@ -27,11 +27,11 @@
                     
         <div class="row">
             <div class="col-4">
-                <label>Direccion_id:</label>
+                <label>Direccion id:</label>
             </div>
             <div class="col-8">
                 <select class="form-control" [disabled]="mode === 1" formControlName="direccion_id" [ngClass]="{'inputInvalido': trySend && theFormGroup.get('direccion_id')?.errors}">
-                    <option [value]="direccion.id"  *ngFor="let direccion of direcciones" >{{direccion.id}}</option>
+                    <option [value]="direccion.id"  *ngFor="let direccion of direcciones" >{{direccion.id}}. {{direccion.barrio}} {{direccion.tipo_calle}} {{direccion.calle}}</option>
                 </select>
             </div>
         </div> 
@@ -43,7 +43,7 @@
             </div>
             <div class="col-8">
                 <select class="form-control" [disabled]="mode === 1" formControlName="ruta_id" [ngClass]="{'inputInvalido': trySend && theFormGroup.get('ruta_id')?.errors}">
-                    <option [value]="ruta.id"  *ngFor="let ruta of rutas" >{{ruta.id}}</option>
+                    <option [value]="ruta.id"  *ngFor="let ruta of rutas" >{{ruta.id}}. {{ruta.lugar_inicio}} -> {{ruta.lugar_fin}}</option>
                 </select>
             </div>
         </div> 
@@ -55,7 +55,7 @@
             </div>
             <div class="col-8">
                 <select class="form-control" [disabled]="mode === 1" formControlName="lote_id" [ngClass]="{'inputInvalido': trySend && theFormGroup.get('lote_id')?.errors}">
-                    <option [value]="lote.id"  *ngFor="let lote of lotes" >{{lote.id}}</option>
+                    <option [value]="lote.id"  *ngFor="let lote of lotes" >{{lote.id}}. {{lote.tipo_carga}} {{lote.peso}}</option>
                 </select>
             </div>
         </div> 
@@ -91,7 +91,13 @@
                 <label>Estado:</label>
             </div>
             <div class="col-8">
-                <input type="text" class="form-control" [disabled]="mode === 1" formControlName="estado" [ngClass]="{'inputInvalido': trySend && theFormGroup.get('estado')?.errors}">
+                <select class="form-control" [disabled]="mode === 1" formControlName="estado" [ngClass]="{'inputInvalido': trySend && theFormGroup.get('estado')?.errors}">
+                    <option value="">Seleccione un estado</option>
+                    <option value="Pendiente">Pendiente</option>
+                    <option value="En Proceso">En Proceso</option>
+                    <option value="Completado">Completado</option>
+                    <option value="Cancelado">Cancelado</option>
+                </select>
             </div>
         </div> 
         <br/>

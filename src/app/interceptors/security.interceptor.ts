@@ -20,10 +20,11 @@ export class SecurityInterceptor implements HttpInterceptor {
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     // Si la solicitud es para la ruta de "login", no adjuntes el token
-    if (request.url.includes('/login') || request.url.includes('/token-validation')) {
+    //if (request.url.includes('/login') || request.url.includes('/token-validation')) {
+    if(true){
       console.log("no se pone token")
       return next.handle(request);
-
+      
     } else {
       let theUser = this.securityService.activeUserSession
       const token = theUser["token"];

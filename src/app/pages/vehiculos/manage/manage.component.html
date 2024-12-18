@@ -57,10 +57,28 @@
         
         <div class="row">
             <div class="col-4">
-                <label>Tipo_carga:</label>
+                <label>Tipo de carga:</label>
             </div>
             <div class="col-8">
-                <input type="text" class="form-control" [disabled]="mode === 1" formControlName="tipo_carga" [ngClass]="{'inputInvalido': trySend && theFormGroup.get('tipo_carga')?.errors}">
+                <select 
+                class="form-control" 
+                [disabled]="mode === 1" 
+                formControlName="tipo_carga" 
+                [ngClass]="{'inputInvalido': trySend && theFormGroup.get('tipo_carga')?.errors}">
+                <option value="mercancia_general">Mercancía General</option>
+                <option value="productos_perecederos">Productos Perecederos</option>
+                <option value="quimicos">Productos Químicos</option>
+                <option value="material_construccion">Material de Construcción</option>
+                <option value="maquinaria">Maquinaria</option>
+                <option value="vehiculos">Vehículos</option>
+                <option value="animales">Animales</option>
+                <option value="productos_farmaceuticos">Productos Farmacéuticos</option>
+                <option value="ropa">Ropa</option>
+                <option value="electrodomesticos">Electrodomésticos</option>
+                <option value="muebles">Muebles</option>
+                <option value="alimentos_no_perecederos">Alimentos No Perecederos</option>
+                <option value="otros">Otros</option>
+            </select>
             </div>
         </div> 
         <br/>
