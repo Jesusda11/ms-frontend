@@ -16,7 +16,6 @@
                     <thead>
                         <tr>
                           <th scope="col">Costo</th>
-<th scope="col">Servicio_id</th>
 <th scope="col">Conductor_id</th>
 <th scope="col">Duenios_id</th>
 <th scope="col">Factura_id</th>
@@ -29,8 +28,7 @@
                         <tr *ngFor="let actual of gastos">
                             
     <td>{{actual.costo}}</td>
-  
-    <td>{{actual.servicio_id}}</td>
+
   
     <td>{{actual.conductor_id}}</td>
   
@@ -41,10 +39,10 @@
     <td>{{actual.id}}</td>
   
                             <td>
-                                <button type="button" class="btn btn-success" (click)="view(actual.id)">Visualizar</button>
-                                <button type="button" class="btn btn-warning" (click)="update(actual.id)">Editar</button>
-                                <button type="button" class="btn btn-danger" (click)="delete(actual.id)">Eliminar</button>
-                                <button type="button" class="btn btn-success btn-block" (click)="pagar(actual.id)" >Pagar</button>
+                                <button type="button" class="btn btn-success" (click)="view(actual.id)">👀</button>
+                                <button type="button" class="btn btn-warning" (click)="update(actual.id)">📋</button>
+                                <button type="button" class="btn btn-danger" (click)="delete(actual.id)">🗑️</button>
+                                <button type="button" class="btn btn-success" (click)="pagar(actual.id)">Pagar</button>
                             </td>
                         </tr>
                       </tbody>

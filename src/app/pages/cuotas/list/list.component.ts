@@ -97,6 +97,13 @@ export class ListComponent implements OnInit {
             Swal.showValidationMessage('Por favor ingresa un número de tarjeta válido');
             return;
           }
+
+          // Verificamos que el número de tarjeta tenga una longitud mínima
+            const cardNumberString = cardNumber.toString();
+            if (cardNumberString.length != 16 ) {
+              Swal.showValidationMessage('El número de tarjeta debe tener 16 dígitos');
+              return;
+            }
     
           // Aquí construimos la URL del endpoint que se quiere llamar
           const url = `http://127.0.0.1:3333/pago/cuota/${id}`;
